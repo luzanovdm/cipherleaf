@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024"
+  xmlns="http://www.w3.org/2000/svg">
+  <g fill="#000000" fill-opacity="0.02">
+    <circle cx="1" cy="1" r="1" />
+    <circle cx="1023" cy="1" r="1" />
+    <circle cx="1" cy="1023" r="1" />
+    <circle cx="1023" cy="1023" r="1" />
+  </g>
+  <path
+    d="M248 704C255 533 383 407 718 316C755 306 786 333 778 371C720 632 548 785 326 829C282 838 244 789 248 704Z"
+    fill="#C5C7C5"
+    transform="translate(0 -64)"
+  />
+</svg>

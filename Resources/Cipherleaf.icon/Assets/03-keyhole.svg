@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024"
+  xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="recess" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080A0C" />
+      <stop offset="0.52" stop-color="#171A1D" />
+      <stop offset="1" stop-color="#34383B" />
+    </linearGradient>
+  </defs>
+  <g fill="#000000" fill-opacity="0.02">
+    <circle cx="1" cy="1" r="1" />
+    <circle cx="1023" cy="1" r="1" />
+    <circle cx="1" cy="1023" r="1" />
+    <circle cx="1023" cy="1023" r="1" />
+  </g>
+  <g transform="translate(0 -64)">
+    <path
+      d="M493 509C472 509 455 526 455 547C455 560 462 572 474 579L463 648C460 666 472 678 487 678H499C514 678 526 666 523 648L512 579C524 572 531 560 531 547C531 526 514 509 493 509Z"
+      fill="url(#recess)"
+      stroke="#7A7E80"
+      stroke-opacity="0.38"
+      stroke-width="5"
+    />
+    <path
+      d="M462 546C462 529 476 516 493 516C510 516 524 529 524 546"
+      fill="none"
+      stroke="#050607"
+      stroke-opacity="0.72"
+      stroke-linecap="round"
+      stroke-width="4"
+    />
+    <path
+      d="M516 646C518 659 509 670 498 670H488"
+      fill="none"
+      stroke="#A7AAAB"
+      stroke-opacity="0.24"
+      stroke-linecap="round"
+      stroke-width="3"
+    />
+  </g>
+</svg>

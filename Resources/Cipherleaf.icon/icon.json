@@ -8,10 +8,38 @@
       "layers": [
         {
           "blend-mode": "normal",
+          "glass": false,
+          "hidden": false,
+          "image-name": "03-keyhole.svg",
+          "name": "Recessed keyhole",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "blend-mode": "normal",
+          "glass": false,
+          "hidden": false,
+          "image-name": "02-cipher.svg",
+          "name": "Cipher outlines",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "blend-mode": "normal",
           "glass": true,
           "hidden": false,
-          "image-name": "01-leaf-lock.svg",
-          "name": "Leaf lock",
+          "image-name": "01-glass-leaf.svg",
+          "name": "Glass leaf",
           "position": {
             "scale": 1,
             "translation-in-points": [
@@ -27,7 +55,7 @@
       },
       "translucency": {
         "enabled": true,
-        "value": 0.04
+        "value": 0.12
       }
     }
   ],

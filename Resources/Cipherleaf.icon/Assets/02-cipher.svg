@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024"
+  xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <path
+      id="leaf-shape"
+      d="M248 704C255 533 383 407 718 316C755 306 786 333 778 371C720 632 548 785 326 829C282 838 244 789 248 704Z"
+    />
+    <clipPath id="leaf-clip">
+      <use href="#leaf-shape" />
+    </clipPath>
+    <radialGradient id="cipher-fade" cx="51%" cy="58%" r="60%">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.52" stop-color="#FFFFFF" stop-opacity="0.96" />
+      <stop offset="0.8" stop-color="#FFFFFF" stop-opacity="0.34" />
+      <stop offset="1" stop-color="#000000" />
+    </radialGradient>
+    <mask id="cipher-mask">
+      <rect x="210" y="290" width="610" height="580" fill="url(#cipher-fade)" />
+    </mask>
+  </defs>
+
+  <g fill="#000000" fill-opacity="0.02">
+    <circle cx="1" cy="1" r="1" />
+    <circle cx="1023" cy="1" r="1" />
+    <circle cx="1" cy="1023" r="1" />
+    <circle cx="1023" cy="1023" r="1" />
+  </g>
+
+  <!-- Original geometric cipher glyphs; no external font dependency. -->
+  <g transform="translate(0 -64)">
+    <g
+      clip-path="url(#leaf-clip)"
+      mask="url(#cipher-mask)"
+      fill="none"
+      stroke="#34383B"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-opacity="0.15"
+      stroke-width="1.35"
+    >
+      <path d="M1 1H7L3 11" transform="translate(190 337)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(202 337)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(222 337)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(234 337)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(254 337)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(266 337)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(286 337)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(298 337)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(318 337)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(330 337)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(350 337)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(362 337)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(382 337)" />
+      <path d="M6 11V1L1 8H8" transform="translate(394 337)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(414 337)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(426 337)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(446 337)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(458 337)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(478 337)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(490 337)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(510 337)" />
+      <path d="M1 1H7L3 11" transform="translate(522 337)" />
+      <path d="M6 11V1L1 8H8" transform="translate(542 337)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(554 337)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(574 337)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(586 337)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(606 337)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(618 337)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(638 337)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(650 337)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(670 337)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(682 337)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(190 372)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(202 372)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(222 372)" />
+      <path d="M1 1H7L3 11" transform="translate(234 372)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(254 372)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(266 372)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(286 372)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(298 372)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(318 372)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(330 372)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(350 372)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(362 372)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(382 372)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(394 372)" />
+      <path d="M1 1H7L3 11" transform="translate(414 372)" />
+      <path d="M6 11V1L1 8H8" transform="translate(426 372)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(446 372)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(458 372)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(478 372)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(490 372)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(510 372)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(522 372)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(542 372)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(554 372)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(574 372)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(586 372)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(606 372)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(618 372)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(638 372)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(650 372)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(670 372)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(682 372)" />
+      <path d="M6 11V1L1 8H8" transform="translate(190 407)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(202 407)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(222 407)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(234 407)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(254 407)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(266 407)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(286 407)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(298 407)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(318 407)" />
+      <path d="M1 1H7L3 11" transform="translate(330 407)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(350 407)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(362 407)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(382 407)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(394 407)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(414 407)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(426 407)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(446 407)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(458 407)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(478 407)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(490 407)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(510 407)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(522 407)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(542 407)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(554 407)" />
+      <path d="M1 1H7L3 11" transform="translate(574 407)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(586 407)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(606 407)" />
+      <path d="M6 11V1L1 8H8" transform="translate(618 407)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(638 407)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(650 407)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(670 407)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(682 407)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(190 442)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(202 442)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(222 442)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(234 442)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(254 442)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(266 442)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(286 442)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(298 442)" />
+      <path d="M1 1H7L3 11" transform="translate(318 442)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(330 442)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(350 442)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(362 442)" />
+      <path d="M6 11V1L1 8H8" transform="translate(382 442)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(394 442)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(414 442)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(426 442)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(446 442)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(458 442)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(478 442)" />
+      <path d="M6 11V1L1 8H8" transform="translate(490 442)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(510 442)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(522 442)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(542 442)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(554 442)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(574 442)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(586 442)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(606 442)" />
+      <path d="M1 1H7L3 11" transform="translate(618 442)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(638 442)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(650 442)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(670 442)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(682 442)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(190 477)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(202 477)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(222 477)" />
+      <path d="M6 11V1L1 8H8" transform="translate(234 477)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(254 477)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(266 477)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(286 477)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(298 477)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(318 477)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(330 477)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(350 477)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(362 477)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(382 477)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(394 477)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(414 477)" />
+      <path d="M1 1H7L3 11" transform="translate(426 477)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(446 477)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(458 477)" />
+      <path d="M6 11V1L1 8H8" transform="translate(478 477)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(490 477)" />
+      <path d="M1 1H7L3 11" transform="translate(510 477)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(522 477)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(542 477)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(554 477)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(574 477)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(586 477)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(606 477)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(618 477)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(638 477)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(650 477)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(670 477)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(682 477)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(190 512)" />
+      <path d="M1 1H7L3 11" transform="translate(202 512)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(222 512)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(234 512)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(254 512)" />
+      <path d="M6 11V1L1 8H8" transform="translate(266 512)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(286 512)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(298 512)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(318 512)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(330 512)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(350 512)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(362 512)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(382 512)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(394 512)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(414 512)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(426 512)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(446 512)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(458 512)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(478 512)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(490 512)" />
+      <path d="M6 11V1L1 8H8" transform="translate(510 512)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(522 512)" />
+      <path d="M1 1H7L3 11" transform="translate(542 512)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(554 512)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(574 512)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(586 512)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(606 512)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(618 512)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(638 512)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(650 512)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(670 512)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(682 512)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(190 547)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(202 547)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(222 547)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(234 547)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(254 547)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(266 547)" />
+      <path d="M6 11V1L1 8H8" transform="translate(286 547)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(298 547)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(318 547)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(330 547)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(350 547)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(362 547)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(382 547)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(394 547)" />
+      <path d="M1 1H7L3 11" transform="translate(414 547)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(426 547)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(446 547)" />
+      <path d="M6 11V1L1 8H8" transform="translate(458 547)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(478 547)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(490 547)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(510 547)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(522 547)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(542 547)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(554 547)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(574 547)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(586 547)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(606 547)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(618 547)" />
+      <path d="M6 11V1L1 8H8" transform="translate(638 547)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(650 547)" />
+      <path d="M1 1H7L3 11" transform="translate(670 547)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(682 547)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(190 582)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(202 582)" />
+      <path d="M1 1H7L3 11" transform="translate(222 582)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(234 582)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(254 582)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(266 582)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(286 582)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(298 582)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(318 582)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(330 582)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(350 582)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(362 582)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(382 582)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(394 582)" />
+      <path d="M6 11V1L1 8H8" transform="translate(414 582)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(426 582)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(446 582)" />
+      <path d="M1 1H7L3 11" transform="translate(458 582)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(478 582)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(490 582)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(510 582)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(522 582)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(542 582)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(554 582)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(574 582)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(586 582)" />
+      <path d="M1 1H7L3 11" transform="translate(606 582)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(618 582)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(638 582)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(650 582)" />
+      <path d="M6 11V1L1 8H8" transform="translate(670 582)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(682 582)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(190 617)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(202 617)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(222 617)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(234 617)" />
+      <path d="M6 11V1L1 8H8" transform="translate(254 617)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(266 617)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(286 617)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(298 617)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(318 617)" />
+      <path d="M1 1H7L3 11" transform="translate(330 617)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(350 617)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(362 617)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(382 617)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(394 617)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(414 617)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(426 617)" />
+      <path d="M1 1H7L3 11" transform="translate(446 617)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(458 617)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(478 617)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(490 617)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(510 617)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(522 617)" />
+      <path d="M6 11V1L1 8H8" transform="translate(542 617)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(554 617)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(574 617)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(586 617)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(606 617)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(618 617)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(638 617)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(650 617)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(670 617)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(682 617)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(190 652)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(202 652)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(222 652)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(234 652)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(254 652)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(266 652)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(286 652)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(298 652)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(318 652)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(330 652)" />
+      <path d="M1 1H7L3 11" transform="translate(350 652)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(362 652)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(382 652)" />
+      <path d="M6 11V1L1 8H8" transform="translate(394 652)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(414 652)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(426 652)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(446 652)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(458 652)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(478 652)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(490 652)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(510 652)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(522 652)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(542 652)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(554 652)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(574 652)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(586 652)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(606 652)" />
+      <path d="M6 11V1L1 8H8" transform="translate(618 652)" />
+      <path d="M1 1H7L3 11" transform="translate(638 652)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(650 652)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(670 652)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(682 652)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(190 687)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(202 687)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(222 687)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(234 687)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(254 687)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(266 687)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(286 687)" />
+      <path d="M6 11V1L1 8H8" transform="translate(298 687)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(318 687)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(330 687)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(350 687)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(362 687)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(382 687)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(394 687)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(414 687)" />
+      <path d="M1 1H7L3 11" transform="translate(426 687)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(446 687)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(458 687)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(478 687)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(490 687)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(510 687)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(522 687)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(542 687)" />
+      <path d="M1 1H7L3 11" transform="translate(554 687)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(574 687)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(586 687)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(606 687)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(618 687)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(638 687)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(650 687)" />
+      <path d="M6 11V1L1 8H8" transform="translate(670 687)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(682 687)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(190 722)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(202 722)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(222 722)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(234 722)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(254 722)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(266 722)" />
+      <path d="M1 1H7L3 11" transform="translate(286 722)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(298 722)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(318 722)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(330 722)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(350 722)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(362 722)" />
+      <path d="M6 11V1L1 8H8" transform="translate(382 722)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(394 722)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(414 722)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(426 722)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(446 722)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(458 722)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(478 722)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(490 722)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(510 722)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(522 722)" />
+      <path d="M1 1H7L3 11" transform="translate(542 722)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(554 722)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(574 722)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(586 722)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(606 722)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(618 722)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(638 722)" />
+      <path d="M6 11V1L1 8H8" transform="translate(650 722)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(670 722)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(682 722)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(190 757)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(202 757)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(222 757)" />
+      <path d="M6 11V1L1 8H8" transform="translate(234 757)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(254 757)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(266 757)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(286 757)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(298 757)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(318 757)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(330 757)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(350 757)" />
+      <path d="M1 1H7L3 11" transform="translate(362 757)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(382 757)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(394 757)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(414 757)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(426 757)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(446 757)" />
+      <path d="M6 11V1L1 8H8" transform="translate(458 757)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(478 757)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(490 757)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(510 757)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(522 757)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(542 757)" />
+      <path d="M1 1H7L3 11" transform="translate(554 757)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(574 757)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(586 757)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(606 757)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(618 757)" />
+      <path d="M6 11V1L1 8H8" transform="translate(638 757)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(650 757)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(670 757)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(682 757)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(190 792)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(202 792)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(222 792)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(234 792)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(254 792)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(266 792)" />
+      <path d="M1 1H7L3 11" transform="translate(286 792)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(298 792)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(318 792)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(330 792)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(350 792)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(362 792)" />
+      <path d="M6 11V1L1 8H8" transform="translate(382 792)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(394 792)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(414 792)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(426 792)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(446 792)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(458 792)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(478 792)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(490 792)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(510 792)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(522 792)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(542 792)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(554 792)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(574 792)" />
+      <path d="M1 1H7L3 11" transform="translate(586 792)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(606 792)" />
+      <path d="M6 11V1L1 8H8" transform="translate(618 792)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(638 792)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(650 792)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(670 792)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(682 792)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(190 827)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(202 827)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(222 827)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(234 827)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(254 827)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(266 827)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(286 827)" />
+      <path d="M6 11V1L1 8H8" transform="translate(298 827)" />
+      <path d="M1 1H7L3 11" transform="translate(318 827)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(330 827)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(350 827)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(362 827)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(382 827)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(394 827)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(414 827)" />
+      <path d="M7 1H2L1 6H5Q7 6 7 8V9Q7 11 5 11H2Q1 11 1 10" transform="translate(426 827)" />
+      <path d="M1 7H7V6Q7 4 5 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(446 827)" />
+      <path d="M2 3L4 1V11M2 11H6" transform="translate(458 827)" />
+      <path d="M7 2Q6 1 4 1Q1 1 1 6V9Q1 11 3 11H5Q7 11 7 9V8Q7 6 5 6H1" transform="translate(478 827)" />
+      <path d="M4 6Q1 6 1 3Q1 1 4 1Q7 1 7 3Q7 6 4 6Q1 6 1 9Q1 11 4 11Q7 11 7 9Q7 6 4 6" transform="translate(490 827)" />
+      <path d="M1 3Q1 1 3 1H5Q7 1 7 3Q7 5 5 6L1 11H7" transform="translate(510 827)" />
+      <path d="M7 1V11M7 6Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H4Q6 11 7 9" transform="translate(522 827)" />
+      <path d="M1 10Q2 11 4 11Q7 11 7 6V3Q7 1 5 1H3Q1 1 1 3V4Q1 6 3 6H7" transform="translate(542 827)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(554 827)" />
+      <path d="M1 1V11M1 6Q2 4 4 4H5Q7 4 7 6V9Q7 11 5 11H4Q2 11 1 9" transform="translate(574 827)" />
+      <path d="M1 1H7L3 11" transform="translate(586 827)" />
+      <path d="M6 11V1L1 8H8" transform="translate(606 827)" />
+      <path d="M7 5Q6 4 4 4H3Q1 4 1 6V9Q1 11 3 11H5Q6 11 7 10" transform="translate(618 827)" />
+      <path d="M3 11V3Q3 1 5 1H7M1 5H6" transform="translate(638 827)" />
+      <path d="M1 2Q2 1 4 1H5Q7 1 7 3Q7 5 5 6Q7 7 7 9Q7 11 5 11H3Q2 11 1 10" transform="translate(650 827)" />
+      <path d="M2 1Q1 1 1 3V9Q1 11 3 11H5Q7 11 7 9V3Q7 1 5 1Z" transform="translate(670 827)" />
+      <path d="M1 5Q2 4 4 4H5Q7 4 7 6V11M7 7H3Q1 7 1 9Q1 11 3 11H5Q7 11 7 9" transform="translate(682 827)" />
+    </g>
+  </g>
+</svg>

@@ -91,6 +91,82 @@ if [[ ! -f Resources/Cipherleaf.icon/icon.json ]]; then
   fail "the Icon Composer document is missing"
 fi
 
+icon_group_count="$(
+  plutil -extract groups raw -o - Resources/Cipherleaf.icon/icon.json 2>/dev/null
+)" || fail "the Icon Composer manifest is not valid"
+
+if ! [[ "$icon_group_count" =~ ^[0-9]+$ ]] || ((icon_group_count == 0)); then
+  fail "the Icon Composer manifest must contain at least one layer group"
+fi
+
+declare -a icon_assets=()
+
+for ((group_index = 0; group_index < icon_group_count; group_index += 1)); do
+  layer_count="$(
+    plutil \
+      -extract "groups.${group_index}.layers" \
+      raw \
+      -o - \
+      Resources/Cipherleaf.icon/icon.json \
+      2>/dev/null
+  )" || fail "Icon Composer group $group_index has no valid layers"
+
+  if ! [[ "$layer_count" =~ ^[0-9]+$ ]] || ((layer_count == 0)); then
+    fail "Icon Composer group $group_index must contain at least one layer"
+  fi
+
+  for ((layer_index = 0; layer_index < layer_count; layer_index += 1)); do
+    image_name="$(
+      plutil \
+        -extract "groups.${group_index}.layers.${layer_index}.image-name" \
+        raw \
+        -o - \
+        Resources/Cipherleaf.icon/icon.json \
+        2>/dev/null
+    )" || fail "Icon Composer layer $group_index/$layer_index has no image-name"
+
+    if [[ ! "$image_name" =~ ^[A-Za-z0-9._-]+[.]svg$ ]]; then
+      fail "Icon Composer layer $group_index/$layer_index has an unsafe SVG name"
+    fi
+
+    asset_path="Resources/Cipherleaf.icon/Assets/$image_name"
+    if [[ ! -f "$asset_path" ]]; then
+      fail "Icon Composer layer asset is missing: $asset_path"
+    fi
+
+    if ! xmllint --noout "$asset_path" 2>/dev/null; then
+      fail "Icon Composer layer asset is not valid XML: $asset_path"
+    fi
+
+    if rg -q '<text([[:space:]>])' "$asset_path"; then
+      fail "Icon Composer text must be converted to vector outlines: $asset_path"
+    fi
+
+    for existing_asset in "${icon_assets[@]-}"; do
+      if [[ "$existing_asset" == "$image_name" ]]; then
+        fail "Icon Composer layer asset is referenced more than once: $image_name"
+      fi
+    done
+    icon_assets+=("$image_name")
+  done
+done
+
+while IFS= read -r asset_path; do
+  asset_name="$(basename "$asset_path")"
+  asset_is_referenced=false
+
+  for referenced_asset in "${icon_assets[@]}"; do
+    if [[ "$referenced_asset" == "$asset_name" ]]; then
+      asset_is_referenced=true
+      break
+    fi
+  done
+
+  if [[ "$asset_is_referenced" == false ]]; then
+    fail "unreferenced Icon Composer layer asset found: $asset_path"
+  fi
+done < <(find Resources/Cipherleaf.icon/Assets -type f -name '*.svg' | sort)
+
 if find Resources -type d -name '*.xcassets' -print -quit | grep -q .; then
   fail "legacy asset-catalog app icons are forbidden; use the Icon Composer document"
 fi
