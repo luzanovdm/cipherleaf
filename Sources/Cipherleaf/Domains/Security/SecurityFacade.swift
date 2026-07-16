@@ -23,7 +23,9 @@ final class SecurityFacade {
   }
 
   var identityRecipients: [AgeRecipient] {
-    session.identityRecipients
+    session.document == nil
+      ? workspace.selectedIdentityRecipients
+      : session.identityRecipients
   }
 
   var identityMatchesMetadata: Bool {

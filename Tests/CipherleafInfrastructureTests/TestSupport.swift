@@ -24,6 +24,7 @@ final class TemporaryDirectory {
 
 final class SOPSIntegrationFixture {
   let client: EncryptedFileClient
+  let identityClient: AgeIdentityClient
   let identityURL: URL
 
   private let ageKeygen: URL
@@ -48,7 +49,13 @@ final class SOPSIntegrationFixture {
       sopsPath: sops.path,
       ageKeygenPath: ageKeygen.path
     )
-    client = SOPSCLIClient.live(configurationStore: configurationStore)
+    identityClient = AgeIdentityCLIClient.live(
+      configurationStore: configurationStore
+    )
+    client = SOPSCLIClient.live(
+      configurationStore: configurationStore,
+      identityClient: identityClient
+    )
     identityURL = directory.url.appendingPathComponent("identity.txt")
 
     _ = try await ProcessExecutor().run(

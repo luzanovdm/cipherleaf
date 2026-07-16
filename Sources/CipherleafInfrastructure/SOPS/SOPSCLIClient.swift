@@ -4,9 +4,16 @@ import Foundation
 
 public enum SOPSCLIClient {
   public static func live(
-    configurationStore: ToolConfigurationStore
+    configurationStore: ToolConfigurationStore,
+    identityClient: AgeIdentityClient? = nil
   ) -> EncryptedFileClient {
-    let service = SOPSCLIService(configurationStore: configurationStore)
+    let service = SOPSCLIService(
+      configurationStore: configurationStore,
+      identityClient: identityClient
+        ?? AgeIdentityCLIClient.live(
+          configurationStore: configurationStore
+        )
+    )
     return EncryptedFileClient(
       open: { manifestURL, identityURL in
         try await service.open(
@@ -27,11 +34,16 @@ public enum SOPSCLIClient {
 private struct SOPSCLIService: Sendable {
   private let executor = ProcessExecutor()
   private let fileSafety = FileSafetyValidator()
+  private let identityClient: AgeIdentityClient
   private let locator: ToolLocator
   private let metadataParser = SOPSMetadataParser()
   private let revisionCalculator = FileRevisionCalculator()
 
-  init(configurationStore: ToolConfigurationStore) {
+  init(
+    configurationStore: ToolConfigurationStore,
+    identityClient: AgeIdentityClient
+  ) {
+    self.identityClient = identityClient
     locator = ToolLocator(configurationStore: configurationStore)
   }
 
@@ -40,11 +52,10 @@ private struct SOPSCLIService: Sendable {
     identityURL: URL
   ) async throws -> OpenedSOPSFile {
     try fileSafety.validateManifest(manifestURL)
-    try fileSafety.validateIdentity(identityURL)
     let format = try SOPSFileFormat(url: manifestURL)
     let encryptedData = try Data(contentsOf: manifestURL)
     let recipients = try metadataParser.parse(encryptedData)
-    let identityRecipients = try await deriveRecipients(identityURL: identityURL)
+    let identityRecipients = try await identityClient.inspect(identityURL)
 
     guard !Set(recipients).isDisjoint(with: identityRecipients) else {
       throw SOPSCLIError.identityDoesNotMatch
@@ -183,31 +194,6 @@ private struct SOPSCLIService: Sendable {
     }
   }
 
-  private func deriveRecipients(identityURL: URL) async throws -> [AgeRecipient] {
-    let ageKeygen = try locator.resolve(.ageKeygen)
-    let result = try await executor.run(
-      ProcessRequest(
-        executable: ageKeygen,
-        arguments: ["-y", identityURL.path],
-        currentDirectory: identityURL.deletingLastPathComponent(),
-        environment: SecureEnvironment.sops(),
-        outputLimit: 1_024 * 1_024
-      )
-    )
-
-    let values = String(decoding: result.standardOutput, as: UTF8.self)
-      .split(whereSeparator: \.isWhitespace)
-      .map(String.init)
-      .filter { $0.hasPrefix("age1") }
-    let recipients = try Set(values).map(AgeRecipient.init).sorted {
-      $0.value < $1.value
-    }
-    guard !recipients.isEmpty else {
-      throw SOPSCLIError.identityHasNoNativeRecipients
-    }
-    return recipients
-  }
-
   private func decrypt(
     manifestURL: URL,
     identityURL: URL,
@@ -313,7 +299,6 @@ enum SOPSCLIError: LocalizedError {
   case emptyPatch
   case externalModification
   case identityDoesNotMatch
-  case identityHasNoNativeRecipients
   case recipientsChanged
   case verificationMismatch
 
@@ -325,8 +310,6 @@ enum SOPSCLIError: LocalizedError {
       "The encrypted file changed on disk after it was opened. Reload it before saving."
     case .identityDoesNotMatch:
       "The selected age identity is not one of this document's recipients."
-    case .identityHasNoNativeRecipients:
-      "The selected file does not contain a native age identity."
     case .recipientsChanged:
       "The SOPS recipient metadata changed unexpectedly. The original file was not replaced."
     case .verificationMismatch:

@@ -17,13 +17,18 @@ struct CipherleafApp: App {
   init() {
     let preferences = DiagnosticsPreferences()
     let notices = AppNoticeCenter()
+    let identityClient = AgeIdentityCLIClient.live(
+      configurationStore: preferences.toolConfigurationStore
+    )
     let session = DocumentSession(
       client: SOPSCLIClient.live(
-        configurationStore: preferences.toolConfigurationStore
+        configurationStore: preferences.toolConfigurationStore,
+        identityClient: identityClient
       )
     )
     let workspace = WorkspaceFacade(
       session: session,
+      identityClient: identityClient,
       notices: notices
     )
     let secrets = SecretsFacade(

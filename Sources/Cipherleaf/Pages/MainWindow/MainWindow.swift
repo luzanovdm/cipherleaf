@@ -71,7 +71,7 @@ struct MainWindow: View {
       )
     }
     .task {
-      workspace.restoreIfNeeded()
+      await workspace.restoreIfNeeded()
       await diagnostics.refresh()
     }
     .onChange(of: workspace.phase) {

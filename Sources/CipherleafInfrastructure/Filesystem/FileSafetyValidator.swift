@@ -19,6 +19,11 @@ struct FileSafetyValidator: Sendable {
   }
 
   func validateIdentity(_ url: URL) throws {
+    try validateIdentityCandidate(url)
+    try validateIdentityPermissions(url)
+  }
+
+  func validateIdentityCandidate(_ url: URL) throws {
     let information = try inspect(url)
     guard information.isRegularFile else {
       throw FileSafetyError.notRegularFile(url)
@@ -29,6 +34,10 @@ struct FileSafetyValidator: Sendable {
         maximumBytes: maximumIdentityBytes
       )
     }
+  }
+
+  func validateIdentityPermissions(_ url: URL) throws {
+    let information = try inspect(url)
     guard information.permissions & 0o077 == 0 else {
       throw FileSafetyError.identityPermissionsTooBroad(url)
     }
