@@ -1,0 +1,133 @@
+name: Cipherleaf
+
+options:
+  bundleIdPrefix: app.cipherleaf
+  createIntermediateGroups: true
+  deploymentTarget:
+    macOS: "15.0"
+  fileTypes:
+    icon:
+      file: true
+      buildPhase: resources
+
+settings:
+  base:
+    CLANG_ENABLE_MODULES: YES
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_VERSION: "6.0"
+
+targets:
+  CipherleafDomain:
+    type: framework
+    platform: macOS
+    sources:
+      - path: Sources/CipherleafDomain
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.cipherleaf.domain
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+
+  CipherleafApplication:
+    type: framework
+    platform: macOS
+    sources:
+      - path: Sources/CipherleafApplication
+    dependencies:
+      - target: CipherleafDomain
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.cipherleaf.application
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+
+  CipherleafInfrastructure:
+    type: framework
+    platform: macOS
+    sources:
+      - path: Sources/CipherleafInfrastructure
+    dependencies:
+      - target: CipherleafDomain
+      - target: CipherleafApplication
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.cipherleaf.infrastructure
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+
+  Cipherleaf:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/Cipherleaf
+      - path: Resources/Cipherleaf.icon
+        buildPhase: resources
+      - path: Resources/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    dependencies:
+      - target: CipherleafDomain
+      - target: CipherleafApplication
+      - target: CipherleafInfrastructure
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.cipherleaf.mac
+        PRODUCT_NAME: Cipherleaf
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0.0
+        ASSETCATALOG_COMPILER_APPICON_NAME: Cipherleaf
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleIconName: Cipherleaf
+        INFOPLIST_KEY_CFBundleDisplayName: Cipherleaf
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.developer-tools
+        INFOPLIST_KEY_NSHumanReadableCopyright: Copyright © 2026 Dmitry Luzanov
+        ENABLE_APP_SANDBOX: NO
+    scheme:
+      testTargets:
+        - CipherleafDomainTests
+        - CipherleafApplicationTests
+        - CipherleafInfrastructureTests
+      gatherCoverageData: true
+
+  CipherleafDomainTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/CipherleafDomainTests
+    dependencies:
+      - target: CipherleafDomain
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.cipherleaf.domain-tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  CipherleafApplicationTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/CipherleafApplicationTests
+    dependencies:
+      - target: CipherleafDomain
+      - target: CipherleafApplication
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.cipherleaf.application-tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  CipherleafInfrastructureTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/CipherleafInfrastructureTests
+      - path: Tests/Fixtures
+        buildPhase: resources
+    dependencies:
+      - target: CipherleafDomain
+      - target: CipherleafApplication
+      - target: CipherleafInfrastructure
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.cipherleaf.infrastructure-tests
+        GENERATE_INFOPLIST_FILE: YES

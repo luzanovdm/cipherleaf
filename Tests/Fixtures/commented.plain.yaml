@@ -1,0 +1,6 @@
+# Top-level operator note.
+generation: 1
+service:
+  # Keep this comment beside the credential.
+  token: synthetic-token
+  enabled: true

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024"
+  xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <path
+      id="leaf-shape"
+      d="M238 760C252 555 402 390 752 306C772 301 790 317 786 339C744 588 586 786 322 850C278 861 235 820 238 760Z"
+    />
+    <clipPath id="leaf-clip">
+      <use href="#leaf-shape" />
+    </clipPath>
+    <radialGradient id="cipher-fade" cx="51%" cy="56%" r="66%">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.48" stop-color="#FFFFFF" stop-opacity="0.94" />
+      <stop offset="0.8" stop-color="#FFFFFF" stop-opacity="0.34" />
+      <stop offset="1" stop-color="#000000" />
+    </radialGradient>
+    <mask id="cipher-mask">
+      <rect x="210" y="290" width="610" height="590" fill="url(#cipher-fade)" />
+    </mask>
+    <g id="zero">
+      <rect
+        width="20"
+        height="30"
+        rx="10"
+        fill="none"
+        stroke="#54585B"
+        stroke-width="8"
+      />
+    </g>
+    <g id="one">
+      <rect width="8" height="30" rx="4" fill="#54585B" />
+    </g>
+  </defs>
+
+  <use href="#leaf-shape" fill="#F2F2EF" />
+
+  <g
+    opacity="0.09"
+    clip-path="url(#leaf-clip)"
+    mask="url(#cipher-mask)"
+  >
+    <g transform="translate(260 382)">
+      <use href="#one" x="0" />
+      <use href="#zero" x="42" />
+      <use href="#one" x="86" />
+      <use href="#one" x="123" />
+      <use href="#zero" x="166" />
+      <use href="#zero" x="214" />
+      <use href="#one" x="260" />
+      <use href="#zero" x="300" />
+      <use href="#one" x="348" />
+      <use href="#one" x="390" />
+      <use href="#zero" x="430" />
+    </g>
+    <g transform="translate(246 436)">
+      <use href="#zero" x="0" />
+      <use href="#one" x="48" />
+      <use href="#zero" x="88" />
+      <use href="#one" x="135" />
+      <use href="#zero" x="174" />
+      <use href="#one" x="224" />
+      <use href="#one" x="267" />
+      <use href="#zero" x="310" />
+      <use href="#zero" x="358" />
+      <use href="#one" x="408" />
+      <use href="#zero" x="448" />
+    </g>
+    <g transform="translate(232 490)">
+      <use href="#one" x="0" />
+      <use href="#one" x="39" />
+      <use href="#zero" x="80" />
+      <use href="#zero" x="127" />
+      <use href="#one" x="177" />
+      <use href="#zero" x="218" />
+      <use href="#one" x="267" />
+      <use href="#zero" x="306" />
+      <use href="#one" x="354" />
+      <use href="#zero" x="396" />
+      <use href="#one" x="446" />
+      <use href="#one" x="486" />
+    </g>
+    <g transform="translate(224 544)">
+      <use href="#zero" x="0" />
+      <use href="#one" x="47" />
+      <use href="#one" x="89" />
+      <use href="#zero" x="132" />
+      <use href="#one" x="181" />
+      <use href="#zero" x="221" />
+      <use href="#zero" x="269" />
+      <use href="#one" x="318" />
+      <use href="#zero" x="360" />
+      <use href="#one" x="408" />
+      <use href="#zero" x="450" />
+      <use href="#one" x="500" />
+    </g>
+    <g transform="translate(216 598)">
+      <use href="#one" x="0" />
+      <use href="#zero" x="40" />
+      <use href="#zero" x="87" />
+      <use href="#one" x="137" />
+      <use href="#one" x="177" />
+      <use href="#zero" x="219" />
+      <use href="#one" x="267" />
+      <use href="#zero" x="309" />
+      <use href="#zero" x="357" />
+      <use href="#one" x="407" />
+      <use href="#one" x="447" />
+      <use href="#zero" x="488" />
+    </g>
+    <g transform="translate(214 652)">
+      <use href="#zero" x="0" />
+      <use href="#zero" x="48" />
+      <use href="#one" x="97" />
+      <use href="#zero" x="138" />
+      <use href="#one" x="187" />
+      <use href="#one" x="227" />
+      <use href="#zero" x="269" />
+      <use href="#one" x="318" />
+      <use href="#zero" x="358" />
+      <use href="#zero" x="406" />
+      <use href="#one" x="456" />
+      <use href="#zero" x="496" />
+    </g>
+    <g transform="translate(220 706)">
+      <use href="#one" x="0" />
+      <use href="#zero" x="40" />
+      <use href="#one" x="88" />
+      <use href="#zero" x="129" />
+      <use href="#zero" x="177" />
+      <use href="#one" x="227" />
+      <use href="#zero" x="268" />
+      <use href="#one" x="317" />
+      <use href="#one" x="357" />
+      <use href="#zero" x="399" />
+      <use href="#one" x="447" />
+    </g>
+    <g transform="translate(238 760)">
+      <use href="#zero" x="0" />
+      <use href="#one" x="48" />
+      <use href="#zero" x="88" />
+      <use href="#zero" x="136" />
+      <use href="#one" x="186" />
+      <use href="#zero" x="227" />
+      <use href="#one" x="275" />
+      <use href="#one" x="315" />
+      <use href="#zero" x="357" />
+      <use href="#one" x="405" />
+    </g>
+    <g transform="translate(270 814)">
+      <use href="#one" x="0" />
+      <use href="#one" x="40" />
+      <use href="#zero" x="82" />
+      <use href="#one" x="130" />
+      <use href="#zero" x="171" />
+      <use href="#zero" x="219" />
+      <use href="#one" x="269" />
+      <use href="#zero" x="310" />
+    </g>
+  </g>
+
+  <path
+    fill="none"
+    stroke="#F2F2EF"
+    stroke-linecap="round"
+    stroke-width="54"
+    d="M390 343V258C390 192 436 154 494 154C552 154 598 192 598 258V311"
+  />
+</svg>

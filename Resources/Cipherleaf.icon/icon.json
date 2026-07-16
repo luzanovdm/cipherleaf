@@ -1,0 +1,39 @@
+{
+  "color-space-for-untagged-svg-colors": "display-p3",
+  "fill": {
+    "automatic-gradient": "extended-srgb:0.05490,0.06275,0.07059,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "blend-mode": "normal",
+          "glass": true,
+          "hidden": false,
+          "image-name": "01-leaf-lock.svg",
+          "name": "Leaf lock",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.22
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.04
+      }
+    }
+  ],
+  "supported-platforms": {
+    "squares": [
+      "macOS"
+    ]
+  }
+}
