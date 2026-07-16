@@ -1,5 +1,6 @@
 import AppKit
 import CipherleafApplication
+import CipherleafDomain
 import CipherleafInfrastructure
 import Foundation
 import Observation
@@ -46,9 +47,8 @@ final class WorkspaceFacade {
 
   var pendingAction: PendingAction?
   private(set) var recentDocuments: [URL] = []
-  private(set) var selectedIdentityURL: URL?
 
-  private let bookmarks: KeychainBookmarkStore
+  private let identitySelection: AgeIdentitySelection
   private let notices: AppNoticeCenter
   private let recentStore: RecentDocumentsStore
   private let session: DocumentSession
@@ -57,23 +57,33 @@ final class WorkspaceFacade {
 
   init(
     session: DocumentSession,
+    identityClient: AgeIdentityClient,
     notices: AppNoticeCenter,
     bookmarks: KeychainBookmarkStore = KeychainBookmarkStore(),
     recentStore: RecentDocumentsStore = RecentDocumentsStore()
   ) {
     self.session = session
+    identitySelection = AgeIdentitySelection(
+      client: identityClient,
+      bookmarks: bookmarks
+    )
     self.notices = notices
-    self.bookmarks = bookmarks
     self.recentStore = recentStore
     recentDocuments = recentStore.urls
   }
 
   var identityName: String? {
-    selectedIdentityURL?.lastPathComponent
+    identitySelection.url?.lastPathComponent
+  }
+
+  var selectedIdentityRecipients: [AgeRecipient] {
+    identitySelection.recipients
   }
 
   var activityTitle: String? {
-    session.phase.activityTitle
+    identitySelection.isInspecting
+      ? "Checking age identity…"
+      : session.phase.activityTitle
   }
 
   var hasOpenDocument: Bool {
@@ -81,7 +91,7 @@ final class WorkspaceFacade {
   }
 
   var isBusy: Bool {
-    session.isBusy
+    session.isBusy || identitySelection.isInspecting
   }
 
   var manifestURL: URL? {
@@ -92,13 +102,21 @@ final class WorkspaceFacade {
     session.phase
   }
 
-  func restoreIfNeeded() {
+  func restoreIfNeeded() async {
     guard !didRestore else {
       return
     }
     didRestore = true
-    selectedIdentityURL = bookmarks.restore(.identity)
     recentDocuments = recentStore.urls
+
+    do {
+      try await identitySelection.restore()
+    } catch {
+      notices.present(
+        title: "Saved age identity is unavailable",
+        message: error.localizedDescription
+      )
+    }
   }
 
   func chooseIdentity() {
@@ -106,6 +124,13 @@ final class WorkspaceFacade {
       return
     }
     guard let url = FilePanels.chooseIdentity() else {
+      if pendingManifestAfterIdentitySelection != nil {
+        pendingManifestAfterIdentitySelection = nil
+        notices.present(
+          title: "An age identity is required",
+          message: "Choose an identity before opening an encrypted document."
+        )
+      }
       return
     }
     selectIdentity(url)
@@ -115,13 +140,6 @@ final class WorkspaceFacade {
     guard canStartDocumentOperation() else {
       return
     }
-    if selectedIdentityURL?.standardizedFileURL == url.standardizedFileURL,
-      pendingManifestAfterIdentitySelection == nil
-    {
-      storeIdentitySelection(url)
-      return
-    }
-
     guard !session.isDirty else {
       pendingAction = .selectIdentity(url)
       return
@@ -132,16 +150,10 @@ final class WorkspaceFacade {
       ?? session.manifestURL
     pendingManifestAfterIdentitySelection = nil
 
-    guard let manifestURL else {
-      storeIdentitySelection(url)
-      return
-    }
-
     Task {
-      await open(
-        manifestURL,
-        using: url,
-        updatesIdentitySelection: true
+      await inspectAndUseIdentity(
+        url,
+        manifestURL: manifestURL
       )
     }
   }
@@ -230,8 +242,7 @@ final class WorkspaceFacade {
     }
 
     do {
-      try bookmarks.delete(.identity)
-      selectedIdentityURL = nil
+      try identitySelection.remove()
       notices.statusMessage = "Age identity bookmark removed."
     } catch {
       notices.present(error)
@@ -243,30 +254,25 @@ final class WorkspaceFacade {
   }
 
   private func open(_ manifestURL: URL) async {
-    guard let identityURL = selectedIdentityURL else {
+    guard let identityURL = identitySelection.url else {
       pendingManifestAfterIdentitySelection = manifestURL
       chooseIdentity()
-      if pendingManifestAfterIdentitySelection != nil {
-        pendingManifestAfterIdentitySelection = nil
-        notices.present(
-          title: "An age identity is required",
-          message: "Choose an identity before opening an encrypted document."
-        )
-      }
       return
     }
 
     await open(
       manifestURL,
       using: identityURL,
-      updatesIdentitySelection: false
+      updatesIdentitySelection: false,
+      verifiedIdentityRecipients: nil
     )
   }
 
   private func open(
     _ manifestURL: URL,
     using identityURL: URL,
-    updatesIdentitySelection: Bool
+    updatesIdentitySelection: Bool,
+    verifiedIdentityRecipients: [AgeRecipient]?
   ) async {
     let manifestAccess = SecurityScopedAccess(manifestURL)
     let identityAccess = SecurityScopedAccess(identityURL)
@@ -281,7 +287,12 @@ final class WorkspaceFacade {
         identityURL: identityURL
       )
       if updatesIdentitySelection {
-        storeIdentitySelection(identityURL, statusMessage: nil)
+        storeIdentitySelection(
+          identityURL,
+          recipients: verifiedIdentityRecipients
+            ?? session.identityRecipients,
+          statusMessage: nil
+        )
       }
       recentStore.record(manifestURL)
       recentDocuments = recentStore.urls
@@ -318,19 +329,53 @@ final class WorkspaceFacade {
 
   private func storeIdentitySelection(
     _ url: URL,
+    recipients: [AgeRecipient],
     statusMessage: String? = "Age identity selected."
   ) {
-    selectedIdentityURL = url
     do {
-      try bookmarks.save(url, for: .identity)
+      try identitySelection.store(url, recipients: recipients)
       notices.statusMessage = statusMessage
     } catch {
       notices.present(error)
     }
   }
 
+  private func inspectAndUseIdentity(
+    _ identityURL: URL,
+    manifestURL: URL?
+  ) async {
+    do {
+      let recipients = try await identitySelection.inspect(identityURL)
+      guard let manifestURL else {
+        storeIdentitySelection(
+          identityURL,
+          recipients: recipients,
+          statusMessage: "Age identity verified."
+        )
+        return
+      }
+
+      await open(
+        manifestURL,
+        using: identityURL,
+        updatesIdentitySelection: true,
+        verifiedIdentityRecipients: recipients
+      )
+    } catch is CancellationError {
+      return
+    } catch {
+      if session.document == nil {
+        pendingManifestAfterIdentitySelection = manifestURL
+      }
+      notices.present(
+        title: "Not a usable age identity",
+        message: error.localizedDescription
+      )
+    }
+  }
+
   private func canStartDocumentOperation() -> Bool {
-    guard !session.isBusy else {
+    guard !isBusy else {
       notices.present(DocumentSessionError.documentBusy)
       return false
     }

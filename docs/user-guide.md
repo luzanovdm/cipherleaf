@@ -8,8 +8,13 @@ Install SOPS and age:
 brew install age sops
 ```
 
-Use an existing native age identity. Cipherleaf does not generate or import
-one. Keep the identity outside source repositories and restrict it:
+An age identity is the private key file created by `age-keygen`. It authorizes
+decryption for its matching public `age1…` recipient. The filename often ends
+in `.agekey`, but the name itself is not proof that the file is an identity.
+Do not choose the encrypted SOPS document, `.sops.yaml`, or another YAML file.
+
+Use an existing native age identity. Cipherleaf does not generate, import, or
+copy one. Keep the identity outside source repositories and restrict it:
 
 ```sh
 chmod 600 /path/to/identity.txt
@@ -29,6 +34,14 @@ document.
    - the expected public recipients are present;
    - the format is correct;
    - the expected `.sops.yaml` is shown when the repository has one.
+
+The right-hand Security inspector is deliberately separate from the value
+editor. It is the safety check that answers “can this identity decrypt this
+document?” without revealing any secret values. Before a document is open, it
+confirms that the selected file is a valid native age identity and shows the
+derived public recipient. After opening a document, it also shows the format,
+nearest `.sops.yaml`, document recipients, and whether the identity matches
+them. Use the trailing-sidebar toolbar button to hide or show it.
 
 The app stores a device-only security-scoped bookmark for the selected
 identity and up to eight recent document paths in local preferences. It does
@@ -106,6 +119,11 @@ chmod 600 /path/to/identity.txt
 ```
 
 Then select the identity again.
+
+### Selected file is not an identity
+
+Choose the private key file created by `age-keygen`, not the SOPS document or
+its `.sops.yaml` policy. Cipherleaf verifies the file before remembering it.
 
 ### Identity does not match
 

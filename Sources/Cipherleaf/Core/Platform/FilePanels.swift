@@ -25,7 +25,11 @@ enum FilePanels {
     let panel = NSOpenPanel()
     panel.title = "Choose age identity"
     panel.prompt = "Choose"
-    panel.message = "Cipherleaf keeps the identity in its current location."
+    panel.message = """
+      Select the private identity file created by age-keygen, often ending in \
+      .agekey. Do not select a SOPS document or .sops.yaml policy. Cipherleaf \
+      verifies the file and keeps it in its current location.
+      """
     panel.canChooseDirectories = false
     panel.canChooseFiles = true
     panel.allowsMultipleSelection = false

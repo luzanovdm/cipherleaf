@@ -47,7 +47,8 @@ Run the `Cipherleaf` scheme from Xcode.
 
 ## First use
 
-1. Choose a native age identity file with permissions `0600`.
+1. Choose the private native age identity file created by `age-keygen`, with
+   permissions `0600`. Do not choose the SOPS document or `.sops.yaml`.
 2. Open an existing SOPS-encrypted YAML, JSON, or dotenv document.
 3. Check that the selected identity matches a public recipient in the
    Security inspector.
