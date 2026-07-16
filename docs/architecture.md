@@ -119,6 +119,7 @@ document edit should appear to the user.
 - programmatic clipboard access, network clients, and application logging;
 - public `DocumentSession` storage in app domains;
 - oversized Swift files;
+- invalid, missing, unreferenced, or font-dependent Icon Composer layer assets;
 - legacy asset-catalog app icons;
 - private age identity markers in tests;
 - fixtures that are not visibly synthetic.
