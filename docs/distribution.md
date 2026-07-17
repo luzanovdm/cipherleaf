@@ -23,52 +23,49 @@ public download. Gatekeeper will identify them as unnotarized.
 A public binary should be signed with a **Developer ID Application**
 certificate and notarized with Apple's notary service.
 
-Build the app first, then sign:
+Sign in to the release Apple Developer team in Xcode. The account must be able
+to use Developer ID distribution and notarization. Tag the exact commit, then
+run:
 
 ```sh
-APP=".build/ReleaseDerivedData/Build/Products/Release/Cipherleaf.app"
-codesign \
-  --force \
-  --deep \
-  --options runtime \
-  --timestamp \
-  --sign "Developer ID Application: YOUR NAME (TEAMID)" \
-  "$APP"
-codesign --verify --deep --strict --verbose=2 "$APP"
-spctl --assess --type execute --verbose=2 "$APP"
+git tag -a v1.0.0 -m "Cipherleaf 1.0.0"
+VERSION=1.0.0 TEAM_ID=YOUR_TEAM_ID Scripts/release.sh
 ```
 
-Store notary credentials in the login Keychain once:
+The script:
 
-```sh
-xcrun notarytool store-credentials "cipherleaf-notary"
+- checks that `VERSION` matches `MARKETING_VERSION`;
+- refuses worktree changes and requires `v<VERSION>` at `HEAD` unless the
+  corresponding `ALLOW_DIRTY=1` or `ALLOW_UNTAGGED=1` override is explicit;
+- archives a universal Release build with Hardened Runtime;
+- exports it with Developer ID automatic signing through Xcode;
+- uploads the archive to Apple's notary service and waits for completion;
+- exports the stapled app and verifies its signature, team, ticket, and
+  Gatekeeper assessment;
+- creates the final ZIP and SHA-256 checksum.
+
+The output is:
+
+```text
+.build/release/Cipherleaf-<version>-macos.zip
+.build/release/Cipherleaf-<version>-macos.zip.sha256
 ```
 
-Create a submission archive and notarize it:
+Publish the checked artifacts from the exact tagged commit:
 
 ```sh
-ditto -c -k --sequesterRsrc --keepParent \
-  "$APP" \
-  ".build/release/Cipherleaf-notary.zip"
-xcrun notarytool submit \
-  ".build/release/Cipherleaf-notary.zip" \
-  --keychain-profile "cipherleaf-notary" \
-  --wait
-xcrun stapler staple "$APP"
-xcrun stapler validate "$APP"
-```
-
-Create the final zip only after stapling:
-
-```sh
-ditto -c -k --sequesterRsrc --keepParent \
-  "$APP" \
-  ".build/release/Cipherleaf.zip"
+git push origin v1.0.0
+gh release create v1.0.0 \
+  .build/release/Cipherleaf-1.0.0-macos.zip \
+  .build/release/Cipherleaf-1.0.0-macos.zip.sha256 \
+  --verify-tag \
+  --title "Cipherleaf 1.0.0" \
+  --notes-file CHANGELOG.md
 ```
 
 Never commit signing certificates, private keys, app-specific passwords, or
-notary API keys. A future automated release workflow should use protected
-repository environments and short-lived Keychain imports.
+notary API keys. `Scripts/release.sh` relies on the authenticated local Xcode
+account and stores build products only under the ignored `.build` directory.
 
 ## Release checklist
 
@@ -79,6 +76,6 @@ repository environments and short-lived Keychain imports.
 4. Inspect the app icon at small and large sizes.
 5. Test open, edit, save, external-modification rejection, identity mismatch,
    close, and quit behavior with synthetic material.
-6. Sign and notarize the app.
+6. Run `Scripts/release.sh` from a clean tagged commit.
 7. Verify the stapled app on a separate macOS account or machine.
-8. Publish checksums beside the release.
+8. Publish the archive and checksum in a GitHub Release.

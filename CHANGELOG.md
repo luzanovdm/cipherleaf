@@ -4,7 +4,7 @@ All notable changes to Cipherleaf will be documented here.
 
 The project follows semantic versioning after the first public release.
 
-## 1.0.0 - Unreleased
+## 1.0.0 - 2026-07-17
 
 ### Added
 
@@ -21,3 +21,4 @@ The project follows semantic versioning after the first public release.
   validation.
 - Domain-oriented architecture, automated guardrails, tests, CI, and an Icon
   Composer app icon.
+- Universal Developer ID-signed and Apple-notarized release archive.

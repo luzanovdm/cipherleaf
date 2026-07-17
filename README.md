@@ -32,21 +32,33 @@ beside the Security Inspector. The inspector confirms the public recipient
 match without displaying identity contents or secret values. The screenshot
 uses synthetic names and values only.
 
+## Download
+
+Download the signed and notarized app from the
+[latest GitHub release](https://github.com/luzanovdm/cipherleaf/releases/latest).
+
+1. Install the required command-line tools with `brew install age sops`.
+2. Download `Cipherleaf-<version>-macos.zip` and open it.
+3. Move `Cipherleaf.app` to Applications and launch it normally.
+
+The release is a universal macOS app for Apple silicon and Intel Macs. GitHub
+also provides a SHA-256 checksum beside the archive.
+
 ## Requirements
 
 - macOS 15 or newer
 - SOPS and age installed locally
-- Xcode 26 or newer and XcodeGen when building from source
 
 Install the command-line tools with Homebrew:
 
 ```sh
-brew install age sops xcodegen
+brew install age sops
 ```
 
 ## Run from source
 
 ```sh
+brew install xcodegen
 git clone https://github.com/luzanovdm/cipherleaf.git
 cd cipherleaf
 xcodegen generate
@@ -91,8 +103,9 @@ actionlint .github/workflows/*.yml
 CI also lints shell scripts and workflows, builds an unsigned review package,
 and verifies the Icon Composer resources in the app bundle.
 
-The generated `Cipherleaf.xcodeproj` is intentionally ignored. `project.yml`
-is the source of truth.
+Building from source requires Xcode 26 or newer. The generated
+`Cipherleaf.xcodeproj` is intentionally ignored; `project.yml` is the source
+of truth.
 
 See [architecture](docs/architecture.md), [contributing](CONTRIBUTING.md), and
 [distribution](docs/distribution.md) for more detail.
