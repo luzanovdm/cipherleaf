@@ -54,7 +54,11 @@ private struct SecretEditor: View {
 
   var body: some View {
     Form {
-      SecretIdentitySection(path: path, value: value)
+      SecretIdentitySection(
+        path: path,
+        value: value,
+        isEditable: isEditable
+      )
 
       Section("Value") {
         Picker("Type", selection: kindBinding) {
@@ -62,6 +66,7 @@ private struct SecretEditor: View {
             Text(kind.title).tag(kind)
           }
         }
+        .disabled(!isEditable)
 
         editor
       }
@@ -71,13 +76,14 @@ private struct SecretEditor: View {
           Button("Rename key…") {
             secrets.presentRename(at: path)
           }
-          .disabled(path.editablePath == nil)
+          .disabled(!secrets.canRename(at: path))
 
           Spacer()
 
           Button("Remove value", role: .destructive) {
             requestRemoval()
           }
+          .disabled(!isEditable)
         }
       } footer: {
         Text("Change summaries contain paths only. Values are never included.")
@@ -137,10 +143,12 @@ private struct SecretEditor: View {
             TextField("Value", text: $textDraft)
               .textFieldStyle(.roundedBorder)
               .focused($focusedField, equals: .content)
+              .disabled(!isEditable)
           } else {
             SecureField("Value", text: $textDraft)
               .textFieldStyle(.roundedBorder)
               .focused($focusedField, equals: .content)
+              .disabled(!isEditable)
           }
 
           visibilityButton
@@ -165,6 +173,7 @@ private struct SecretEditor: View {
             .textFieldStyle(.roundedBorder)
             .font(.body.monospaced())
             .focused($focusedField, equals: .content)
+            .disabled(!isEditable)
             .onSubmit {
               commitDraftIfValid()
             }
@@ -188,6 +197,7 @@ private struct SecretEditor: View {
         HStack {
           if isRevealed {
             Toggle("Enabled", isOn: booleanBinding)
+              .disabled(!isEditable)
           } else {
             Text("••••••••")
               .font(.body.monospaced())
@@ -219,6 +229,10 @@ private struct SecretEditor: View {
         secrets.changeKind(kind, at: path)
       }
     )
+  }
+
+  private var isEditable: Bool {
+    secrets.canEdit(at: path)
   }
 
   private var booleanBinding: Binding<Bool> {
@@ -309,6 +323,7 @@ private struct SecretEditor: View {
 private struct SecretIdentitySection: View {
   let path: SecretPath
   let value: SecretValue
+  let isEditable: Bool
 
   var body: some View {
     Section("Identity") {
@@ -318,6 +333,14 @@ private struct SecretIdentitySection: View {
           .textSelection(.disabled)
       }
       LabeledContent("Stored type", value: value.kindName)
+      if !isEditable {
+        Label(
+          "This path is read-only because sops set and unset cannot address its key syntax safely.",
+          systemImage: "exclamationmark.triangle.fill"
+        )
+        .font(.caption)
+        .foregroundStyle(.orange)
+      }
     }
   }
 }

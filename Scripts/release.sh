@@ -20,8 +20,8 @@ if [[ -z "$VERSION" || -z "$TEAM_ID" ]]; then
   exit 1
 fi
 
-if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][A-Za-z0-9._-]+)?$ ]]; then
-  echo "VERSION must be a release version such as 1.0.0 or 1.0.0-rc.1" >&2
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "VERSION must contain three dot-separated integers such as 1.0.0" >&2
   exit 1
 fi
 
@@ -62,7 +62,7 @@ if [[ "${ALLOW_UNTAGGED:-0}" != "1" ]] && \
   exit 1
 fi
 
-for tool in awk codesign ditto git grep plutil shasum sleep spctl unzip xcodebuild xcodegen xcrun; do
+for tool in awk codesign ditto git grep lipo plutil shasum sleep spctl unzip xcodebuild xcodegen xcrun; do
   if ! command -v "$tool" >/dev/null; then
     echo "Required tool is unavailable: $tool" >&2
     exit 1
@@ -111,6 +111,13 @@ xcodebuild -exportArchive \
   -allowProvisioningUpdates
 
 SIGNED_APP="$SIGNED_EXPORT/Cipherleaf.app"
+ARCHITECTURES="$(lipo -archs "$SIGNED_APP/Contents/MacOS/Cipherleaf")"
+for architecture in arm64 x86_64; do
+  if [[ " $ARCHITECTURES " != *" $architecture "* ]]; then
+    echo "Release binary is missing the $architecture architecture" >&2
+    exit 1
+  fi
+done
 codesign --verify --deep --strict --verbose=2 "$SIGNED_APP"
 
 xcodebuild -exportArchive \

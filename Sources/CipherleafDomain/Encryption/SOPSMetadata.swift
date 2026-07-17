@@ -36,11 +36,14 @@ public struct AgeRecipient: Hashable, Identifiable, Sendable {
   public let value: String
 
   public init(_ value: String) throws {
+    let patterns = [
+      "^age1[023456789ac-hj-np-z]{20,}$",
+      "^age1pq1[023456789ac-hj-np-z]{20,}$",
+    ]
     guard
-      value.range(
-        of: "^age1[023456789ac-hj-np-z]{20,}$",
-        options: .regularExpression
-      ) != nil
+      patterns.contains(where: { pattern in
+        value.range(of: pattern, options: .regularExpression) != nil
+      })
     else {
       throw AgeRecipientError.invalid
     }

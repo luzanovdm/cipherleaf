@@ -24,15 +24,23 @@ struct AddSecretSheet: View {
     VStack(spacing: 0) {
       Form {
         Section("Location") {
-          TextField("Path", text: $path, prompt: Text("database.password"))
-            .font(.body.monospaced())
-            .focused($focusedField, equals: .path)
-            .onSubmit {
-              focusedField = .value
-            }
-          Text("Use dots for nested object keys.")
-            .font(.caption)
-            .foregroundStyle(.secondary)
+          TextField(
+            "Path",
+            text: $path,
+            prompt: Text(secrets.usesFlatKeys ? "DATABASE_PASSWORD" : "database.password")
+          )
+          .font(.body.monospaced())
+          .focused($focusedField, equals: .path)
+          .onSubmit {
+            focusedField = .value
+          }
+          Text(
+            secrets.usesFlatKeys
+              ? "dotenv values use one flat key; dots are part of the key."
+              : "Use dots for nested object keys."
+          )
+          .font(.caption)
+          .foregroundStyle(.secondary)
         }
 
         Section("Value") {
@@ -188,7 +196,7 @@ struct AddSecretSheet: View {
   }
 
   private var isValid: Bool {
-    guard (try? SecretPath.parseEditablePath(path)) != nil else {
+    guard secrets.isValidNewPath(path) else {
       return false
     }
     return kind != .number || SecretValue.validateNumber(textValue)

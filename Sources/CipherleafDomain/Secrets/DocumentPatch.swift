@@ -65,6 +65,12 @@ public struct DocumentPatch: Equatable, Sendable {
         return true
       case (.unset, .unset):
         if lhs.path.depth == rhs.path.depth {
+          if lhs.path.parent == rhs.path.parent,
+            case .index(let lhsIndex)? = lhs.path.components.last,
+            case .index(let rhsIndex)? = rhs.path.components.last
+          {
+            return lhsIndex > rhsIndex
+          }
           return lhs.path.display < rhs.path.display
         }
         return lhs.path.depth > rhs.path.depth
@@ -119,15 +125,35 @@ public struct DocumentPatch: Equatable, Sendable {
         }
       }
 
-    case (.array(let oldValues), .array(let newValues))
-    where oldValues.count == newValues.count:
-      for index in oldValues.indices {
+    case (.array(let oldValues), .array(let newValues)):
+      if let removedIndices = removedIndices(
+        from: oldValues,
+        leaving: newValues
+      ) {
+        for index in removedIndices {
+          operations.append(.unset(path: path.appending(.index(index))))
+        }
+        return
+      }
+      let sharedCount = min(oldValues.count, newValues.count)
+      for index in 0..<sharedCount {
         diff(
           baseline: oldValues[index],
           candidate: newValues[index],
           path: path.appending(.index(index)),
           operations: &operations
         )
+      }
+      if oldValues.count > newValues.count {
+        for index in newValues.count..<oldValues.count {
+          operations.append(.unset(path: path.appending(.index(index))))
+        }
+      } else if newValues.count > oldValues.count {
+        for index in oldValues.count..<newValues.count {
+          operations.append(
+            .set(path: path.appending(.index(index)), value: newValues[index])
+          )
+        }
       }
 
     default:
@@ -136,5 +162,27 @@ public struct DocumentPatch: Equatable, Sendable {
       }
       operations.append(.set(path: path, value: candidate))
     }
+  }
+
+  private static func removedIndices(
+    from baseline: [SecretValue],
+    leaving candidate: [SecretValue]
+  ) -> [Int]? {
+    guard baseline.count > candidate.count else {
+      return nil
+    }
+
+    var candidateIndex = 0
+    var removed: [Int] = []
+    for baselineIndex in baseline.indices {
+      if candidateIndex < candidate.count,
+        baseline[baselineIndex] == candidate[candidateIndex]
+      {
+        candidateIndex += 1
+      } else {
+        removed.append(baselineIndex)
+      }
+    }
+    return candidateIndex == candidate.count ? removed : nil
   }
 }

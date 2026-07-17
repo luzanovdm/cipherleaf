@@ -71,6 +71,10 @@ final class SecretsFacade {
     session.sourceContainsComments
   }
 
+  var usesFlatKeys: Bool {
+    session.format == .dotenv
+  }
+
   var isOpen: Bool {
     session.phase == .open
   }
@@ -107,13 +111,29 @@ final class SecretsFacade {
     session.value(at: path)
   }
 
+  func isValidNewPath(_ rawPath: String) -> Bool {
+    (try? session.pathForNewValue(rawPath)) != nil
+  }
+
+  func canRename(at path: SecretPath) -> Bool {
+    session.canRename(at: path)
+  }
+
+  func canEdit(at path: SecretPath) -> Bool {
+    session.canEdit(at: path)
+  }
+
+  func isValidRenameKey(_ rawValue: String, at path: SecretPath) -> Bool {
+    session.isValidRenameKey(rawValue, at: path)
+  }
+
   func changeKind(at path: SecretPath) -> DocumentChangeKind? {
     session.changeKind(at: path)
   }
 
   func add(path rawPath: String, value: SecretValue) -> Bool {
     do {
-      let path = try SecretPath.parseEditablePath(rawPath)
+      let path = try session.pathForNewValue(rawPath)
       try session.add(value, at: path)
       selectedPath = path
       notices.statusMessage = nil
@@ -180,12 +200,18 @@ final class SecretsFacade {
   }
 
   func undo() {
+    let invalidBaselines = invalidValueBaselines()
     session.undo()
+    repairValidationIssues(preserving: invalidBaselines)
+    repairPresentedSheet()
     repairSelection()
   }
 
   func redo() {
+    let invalidBaselines = invalidValueBaselines()
     session.redo()
+    repairValidationIssues(preserving: invalidBaselines)
+    repairPresentedSheet()
     repairSelection()
   }
 
@@ -250,6 +276,25 @@ final class SecretsFacade {
       }
     case nil:
       break
+    }
+  }
+
+  private func invalidValueBaselines() -> [SecretPath: SecretValue] {
+    Dictionary(
+      uniqueKeysWithValues: validationIssues.keys.compactMap { path in
+        session.value(at: path).map { (path, $0) }
+      }
+    )
+  }
+
+  private func repairValidationIssues(
+    preserving baselines: [SecretPath: SecretValue]
+  ) {
+    validationIssues = validationIssues.filter { path, _ in
+      guard case .number? = session.value(at: path) else {
+        return false
+      }
+      return session.value(at: path) == baselines[path]
     }
   }
 

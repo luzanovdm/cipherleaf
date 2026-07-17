@@ -4,6 +4,21 @@ All notable changes to Cipherleaf will be documented here.
 
 The project follows semantic versioning after the first public release.
 
+## 1.0.1 - 2026-07-17
+
+### Fixed
+
+- Accept native post-quantum hybrid age recipients and multi-identity files.
+- Treat dotenv keys as flat names, including literal dots, and reject SOPS
+  metadata paths before mutation.
+- Safely handle SOPS path-syntax edge cases and keep unaddressable values
+  read-only.
+- Preserve array semantics when elements are removed and when arrays become
+  empty.
+- Clear stale save review and validation state after undo or redo.
+- Derive package checks from project versions and verify universal release
+  binaries.
+
 ## 1.0.0 - 2026-07-17
 
 ### Added

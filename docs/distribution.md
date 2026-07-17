@@ -8,8 +8,9 @@ Run:
 Scripts/package.sh
 ```
 
-The script builds Release configuration, verifies the compiled Icon Composer
-resources and privacy manifest, and creates:
+The script builds Release configuration, verifies the app version, universal
+`arm64`/`x86_64` binary, compiled Icon Composer resources, and privacy
+manifest, then creates:
 
 ```text
 .build/release/Cipherleaf-<version>-unsigned.zip
@@ -28,8 +29,9 @@ to use Developer ID distribution and notarization. Tag the exact commit, then
 run:
 
 ```sh
-git tag -a v1.0.0 -m "Cipherleaf 1.0.0"
-VERSION=1.0.0 TEAM_ID=YOUR_TEAM_ID Scripts/release.sh
+VERSION=1.0.1
+git tag -a "v$VERSION" -m "Cipherleaf $VERSION"
+VERSION="$VERSION" TEAM_ID=YOUR_TEAM_ID Scripts/release.sh
 ```
 
 The script:
@@ -37,7 +39,8 @@ The script:
 - checks that `VERSION` matches `MARKETING_VERSION`;
 - refuses worktree changes and requires `v<VERSION>` at `HEAD` unless the
   corresponding `ALLOW_DIRTY=1` or `ALLOW_UNTAGGED=1` override is explicit;
-- archives a universal Release build with Hardened Runtime;
+- archives a Release build with Hardened Runtime and verifies both `arm64` and
+  `x86_64` slices;
 - exports it with Developer ID automatic signing through Xcode;
 - uploads the archive to Apple's notary service and waits for completion;
 - staples the accepted Apple ticket to the signed app and verifies its
@@ -54,13 +57,13 @@ The output is:
 Publish the checked artifacts from the exact tagged commit:
 
 ```sh
-git push origin v1.0.0
-gh release create v1.0.0 \
-  .build/release/Cipherleaf-1.0.0-macos.zip \
-  .build/release/Cipherleaf-1.0.0-macos.zip.sha256 \
+git push origin "v$VERSION"
+gh release create "v$VERSION" \
+  ".build/release/Cipherleaf-$VERSION-macos.zip" \
+  ".build/release/Cipherleaf-$VERSION-macos.zip.sha256" \
   --verify-tag \
-  --title "Cipherleaf 1.0.0" \
-  --notes-file CHANGELOG.md
+  --title "Cipherleaf $VERSION" \
+  --generate-notes
 ```
 
 Never commit signing certificates, private keys, app-specific passwords, or

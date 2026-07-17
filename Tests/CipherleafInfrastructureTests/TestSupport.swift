@@ -33,7 +33,7 @@ final class SOPSIntegrationFixture {
   private let recipient: String
   private let sops: URL
 
-  init() async throws {
+  init(postQuantum: Bool = false) async throws {
     directory = try TemporaryDirectory()
     let configurationStore = ToolConfigurationStore()
     let locator = ToolLocator(configurationStore: configurationStore)
@@ -58,10 +58,14 @@ final class SOPSIntegrationFixture {
     )
     identityURL = directory.url.appendingPathComponent("identity.txt")
 
+    let generationArguments =
+      postQuantum
+      ? ["-pq", "-o", identityURL.path]
+      : ["-o", identityURL.path]
     _ = try await ProcessExecutor().run(
       ProcessRequest(
         executable: ageKeygen,
-        arguments: ["-o", identityURL.path],
+        arguments: generationArguments,
         environment: SecureEnvironment.sops()
       )
     )
@@ -82,13 +86,9 @@ final class SOPSIntegrationFixture {
     _ plaintext: Data,
     format: SOPSFileFormat = .yaml
   ) async throws -> URL {
-    let plaintextURL = directory.url.appendingPathComponent(
-      "synthetic-plain.\(format.rawValue)"
-    )
     let manifestURL = directory.url.appendingPathComponent(
       "synthetic.sops.\(format.rawValue)"
     )
-    try plaintext.write(to: plaintextURL)
 
     _ = try await executor.run(
       ProcessRequest(
@@ -98,13 +98,36 @@ final class SOPSIntegrationFixture {
           "--age", recipient,
           "--input-type", format.rawValue,
           "--output-type", format.rawValue,
+          "--filename-override", "synthetic-plain.\(format.rawValue)",
           "--output", manifestURL.path,
-          plaintextURL.path,
         ],
+        input: plaintext,
         environment: SecureEnvironment.sops()
       )
     )
     return manifestURL
+  }
+
+  func saveRequest(
+    manifestURL: URL,
+    opened: OpenedSOPSFile,
+    root: SecretValue
+  ) -> SaveSOPSFileRequest {
+    SaveSOPSFileRequest(
+      manifestURL: manifestURL,
+      identityURL: identityURL,
+      format: opened.format,
+      expectedRevision: opened.revision,
+      originalRecipients: opened.recipients,
+      candidate: SaveCandidate(
+        root: root,
+        patch: DocumentPatch.between(
+          baseline: opened.root,
+          candidate: root
+        ),
+        nextGeneration: nil
+      )
+    )
   }
 
   func makeClientDelayingSet(

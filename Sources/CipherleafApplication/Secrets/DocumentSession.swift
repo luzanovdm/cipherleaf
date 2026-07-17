@@ -158,6 +158,7 @@ public final class DocumentSession {
   }
 
   public func set(_ value: SecretValue, at path: SecretPath) throws {
+    try validateEditablePath(path)
     try mutate(
       name: "Edit Value",
       coalescingKey: "set:\(path.id)"
@@ -167,32 +168,32 @@ public final class DocumentSession {
   }
 
   public func changeKind(_ kind: SecretScalarKind, at path: SecretPath) throws {
+    try validateEditablePath(path)
     try mutate(name: "Change Value Type") { document in
       try document.set(.defaultValue(for: kind), at: path)
     }
   }
 
   public func add(_ value: SecretValue, at path: SecretPath) throws {
+    try validateEditablePath(path)
     try mutate(name: "Add Value") { document in
       try document.add(value, at: path)
     }
   }
 
   public func remove(at path: SecretPath) throws {
+    try validateEditablePath(path)
     try mutate(name: "Remove Value") { document in
       try document.remove(at: path)
     }
   }
 
   public func rename(at path: SecretPath, to newKey: String) throws -> SecretPath {
-    var destination: SecretPath?
+    let rename = try renameDestination(at: path, rawValue: newKey)
     try mutate(name: "Rename Key") { document in
-      destination = try document.rename(at: path, to: newKey)
+      _ = try document.rename(at: path, to: rename.key)
     }
-    guard let destination else {
-      throw DocumentSessionError.mutationDidNotProduceDestination
-    }
-    return destination
+    return rename.path
   }
 
   public func discardChanges() {
@@ -375,7 +376,6 @@ private struct HistoryEntry {
 
 public enum DocumentSessionError: LocalizedError {
   case documentBusy
-  case mutationDidNotProduceDestination
   case noOpenDocument
   case staleSaveReview
 
@@ -383,8 +383,6 @@ public enum DocumentSessionError: LocalizedError {
     switch self {
     case .documentBusy:
       "Wait for the current document operation to finish."
-    case .mutationDidNotProduceDestination:
-      "The rename operation did not produce a destination path."
     case .noOpenDocument:
       "No encrypted document is open."
     case .staleSaveReview:

@@ -9,9 +9,10 @@ brew install age sops
 ```
 
 An age identity is the private key file created by `age-keygen`. It authorizes
-decryption for its matching public `age1…` recipient. The filename often ends
-in `.agekey`, but the name itself is not proof that the file is an identity.
-Do not choose the encrypted SOPS document, `.sops.yaml`, or another YAML file.
+decryption for its matching public X25519 (`age1…`) or post-quantum hybrid
+(`age1pq1…`) recipient. The filename often ends in `.agekey`, but the name
+itself is not proof that the file is an identity. Do not choose the encrypted
+SOPS document, `.sops.yaml`, or another YAML file.
 
 Use an existing native age identity. Cipherleaf does not generate, import, or
 copy one. Keep the identity outside source repositories and restrict it:
@@ -20,8 +21,8 @@ copy one. Keep the identity outside source repositories and restrict it:
 chmod 600 /path/to/identity.txt
 ```
 
-The identity must match at least one public `age1…` recipient in the encrypted
-document.
+The identity must match at least one public native age recipient in the
+encrypted document. Age plugin recipients are not currently supported.
 
 ## Open a document
 
@@ -72,6 +73,17 @@ revealed.
 
 Only scalar leaves are editable. Objects and arrays are represented through
 their child paths.
+
+YAML and JSON use dots to separate nested object keys when adding a value.
+Dotenv documents are always flat: `SERVICE.TOKEN` is one key whose name
+contains a dot. SOPS metadata names are reserved and cannot be added or
+renamed from Cipherleaf.
+
+SOPS cannot safely address every possible YAML or JSON key through its
+`set`/`unset` path syntax. If an existing key contains an opening bracket, or
+contains both single and double quotes, Cipherleaf keeps the value readable
+but disables mutation controls for that path instead of risking an edit to a
+different key.
 
 ## Save
 

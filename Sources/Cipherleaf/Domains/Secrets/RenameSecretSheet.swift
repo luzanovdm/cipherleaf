@@ -57,7 +57,7 @@ struct RenameSecretSheet: View {
   }
 
   private var isValid: Bool {
-    (try? SecretPath.parseEditablePath(key))?.components.count == 1
+    secrets.isValidRenameKey(key, at: path)
   }
 
   private func rename() {
