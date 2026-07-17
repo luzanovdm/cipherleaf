@@ -35,7 +35,7 @@ extension SecretValue {
     guard let parent = path.parent,
       let last = path.components.last,
       case .key(let oldKey) = last,
-      SecretPath(components: [.key(newKey)]).editablePath != nil
+      !newKey.isEmpty
     else {
       throw SecretValueError.renameUnsupported
     }

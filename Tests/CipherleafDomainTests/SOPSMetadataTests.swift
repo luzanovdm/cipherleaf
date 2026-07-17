@@ -10,6 +10,12 @@ final class SOPSMetadataTests: XCTestCase {
     XCTAssertEqual(try AgeRecipient(value).value, value)
   }
 
+  func testAcceptsNativePostQuantumAgeRecipient() throws {
+    let value = "age1pq1" + String(repeating: "q", count: 64)
+
+    XCTAssertEqual(try AgeRecipient(value).value, value)
+  }
+
   func testRejectsMalformedAgeRecipient() {
     XCTAssertThrowsError(
       try AgeRecipient("age1contains-invalid-uppercase")

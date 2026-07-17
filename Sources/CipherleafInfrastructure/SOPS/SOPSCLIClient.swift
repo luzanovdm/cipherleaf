@@ -37,6 +37,7 @@ private struct SOPSCLIService: Sendable {
   private let identityClient: AgeIdentityClient
   private let locator: ToolLocator
   private let metadataParser = SOPSMetadataParser()
+  private let patchApplier = SOPSPatchApplier()
   private let revisionCalculator = FileRevisionCalculator()
 
   init(
@@ -91,6 +92,10 @@ private struct SOPSCLIService: Sendable {
     guard !request.candidate.patch.operations.isEmpty else {
       throw SOPSCLIError.emptyPatch
     }
+    try request.format.validateCandidateRoot(request.candidate.root)
+    for operation in request.candidate.patch.operations {
+      try request.format.validateEditablePath(operation.path)
+    }
 
     try fileSafety.validateIdentity(request.identityURL)
     let currentSnapshot = try fileSafety.readManifest(request.manifestURL)
@@ -114,13 +119,15 @@ private struct SOPSCLIService: Sendable {
       currentSnapshot.data,
       for: request.manifestURL
     )
+    let sops = try locator.resolve(.sops)
 
     for operation in request.candidate.patch.operations {
-      try await apply(
+      try await patchApplier.apply(
         operation,
         to: transaction.stagedURL,
         identityURL: request.identityURL,
-        format: request.format
+        format: request.format,
+        sops: sops
       )
     }
 
@@ -228,53 +235,6 @@ private struct SOPSCLIService: Sendable {
       )
     )
     return try SecretValue.decodeDocument(result.standardOutput)
-  }
-
-  private func apply(
-    _ operation: PatchOperation,
-    to stagedURL: URL,
-    identityURL: URL,
-    format: SOPSFileFormat
-  ) async throws {
-    let sops = try locator.resolve(.sops)
-
-    switch operation {
-    case .set(let path, let value):
-      let input = try value.encoded()
-      _ = try await executor.run(
-        ProcessRequest(
-          executable: sops,
-          arguments: [
-            "set",
-            "--input-type", format.rawValue,
-            "--output-type", format.rawValue,
-            "--value-stdin",
-            stagedURL.path,
-            path.sopsIndex,
-          ],
-          input: input,
-          currentDirectory: stagedURL.deletingLastPathComponent(),
-          environment: SecureEnvironment.sops(identityURL: identityURL)
-        )
-      )
-
-    case .unset(let path):
-      _ = try await executor.run(
-        ProcessRequest(
-          executable: sops,
-          arguments: [
-            "unset",
-            "--input-type", format.rawValue,
-            "--output-type", format.rawValue,
-            "--idempotent",
-            stagedURL.path,
-            path.sopsIndex,
-          ],
-          currentDirectory: stagedURL.deletingLastPathComponent(),
-          environment: SecureEnvironment.sops(identityURL: identityURL)
-        )
-      )
-    }
   }
 
   private func nearestPolicy(to manifestURL: URL) -> URL? {

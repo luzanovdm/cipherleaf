@@ -33,26 +33,20 @@ public struct SecretPath: Hashable, Identifiable, Sendable {
     }
   }
 
-  public var sopsIndex: String {
-    components.map { component in
+  public var sopsIndex: String? {
+    var rendered = ""
+    for component in components {
       switch component {
       case .key(let key):
-        "[\(Self.quoted(key))]"
+        guard let keyComponent = Self.sopsKeyComponent(key) else {
+          return nil
+        }
+        rendered += keyComponent
       case .index(let index):
-        "[\(index)]"
+        rendered += "[\(index)]"
       }
-    }.joined()
-  }
-
-  public var editablePath: String? {
-    var keys: [String] = []
-    for component in components {
-      guard case .key(let key) = component, Self.isSimpleKey(key) else {
-        return nil
-      }
-      keys.append(key)
     }
-    return keys.joined(separator: ".")
+    return rendered
   }
 
   public var parent: SecretPath? {
@@ -89,6 +83,19 @@ public struct SecretPath: Hashable, Identifiable, Sendable {
     return SecretPath(components: components)
   }
 
+  public static func parseDotenvKey(_ rawValue: String) throws -> SecretPath {
+    let key = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard
+      key.range(
+        of: #"^[A-Za-z_][A-Za-z0-9_.-]*$"#,
+        options: .regularExpression
+      ) != nil
+    else {
+      throw SecretPathError.invalidDotenvKey
+    }
+    return SecretPath(components: [.key(key)])
+  }
+
   private static func isSimpleKey(_ value: String) -> Bool {
     value.range(
       of: #"^[A-Za-z_][A-Za-z0-9_-]*$"#,
@@ -102,16 +109,32 @@ public struct SecretPath: Hashable, Identifiable, Sendable {
     }
     return String(decoding: data, as: UTF8.self)
   }
+
+  private static func sopsKeyComponent(_ value: String) -> String? {
+    guard !value.contains("["), !value.utf8.contains(0) else {
+      return nil
+    }
+    if !value.contains("\"") {
+      return "[\"\(value)\"]"
+    }
+    if !value.contains("'") {
+      return "['\(value)']"
+    }
+    return nil
+  }
 }
 
 public enum SecretPathError: LocalizedError {
   case empty
+  case invalidDotenvKey
   case invalidSegment(String)
 
   public var errorDescription: String? {
     switch self {
     case .empty:
       "Enter a path such as database.password."
+    case .invalidDotenvKey:
+      "Enter one dotenv key using letters, numbers, underscores, hyphens, or dots."
     case .invalidSegment(let segment):
       "“\(segment)” is not a valid key segment. Use letters, numbers, underscores, or hyphens."
     }

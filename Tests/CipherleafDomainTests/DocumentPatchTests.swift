@@ -78,4 +78,61 @@ final class DocumentPatchTests: XCTestCase {
       ]
     )
   }
+
+  func testArrayShrinkUnsetsIndicesFromEnd() {
+    let baseline = SecretValue.object([
+      "items": .array([
+        .string("one"),
+        .string("two"),
+        .string("three"),
+        .string("four"),
+      ])
+    ])
+    let candidate = SecretValue.object([
+      "items": .array([.string("one"), .string("two")])
+    ])
+
+    let patch = DocumentPatch.between(
+      baseline: baseline,
+      candidate: candidate
+    )
+
+    XCTAssertEqual(
+      patch.operations,
+      [
+        .unset(
+          path: SecretPath(components: [.key("items"), .index(3)])
+        ),
+        .unset(
+          path: SecretPath(components: [.key("items"), .index(2)])
+        ),
+      ]
+    )
+  }
+
+  func testArrayRemovalUsesOriginalIndexWhenCandidateIsSubsequence() {
+    let baseline = SecretValue.object([
+      "items": .array([
+        .string("one"),
+        .string("two"),
+        .string("three"),
+      ])
+    ])
+    let candidate = SecretValue.object([
+      "items": .array([.string("one"), .string("three")])
+    ])
+    let patch = DocumentPatch.between(
+      baseline: baseline,
+      candidate: candidate
+    )
+
+    XCTAssertEqual(
+      patch.operations,
+      [
+        .unset(
+          path: SecretPath(components: [.key("items"), .index(1)])
+        )
+      ]
+    )
+  }
 }

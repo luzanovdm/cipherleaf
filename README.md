@@ -25,6 +25,10 @@ values in JSON-compatible document trees: strings, numbers, Booleans, and
 nulls. It does not create identities, create a new encrypted document, rotate
 recipients, or replace SOPS policy management.
 
+Native age recipients include classic X25519 (`age1…`) and post-quantum hybrid
+(`age1pq1…`) identities when the installed age and SOPS versions support them.
+Plugin recipients are intentionally outside the current scope.
+
 ## Workspace
 
 ![Cipherleaf workspace with a synthetic SOPS document](docs/images/cipherleaf-workspace.png)
@@ -79,6 +83,11 @@ Run the `Cipherleaf` scheme from Xcode.
    Security inspector.
 4. Add, edit, rename, or remove scalar values.
 5. Save and review the redacted list of changed paths.
+
+YAML and JSON use dotted paths for nested object keys. Dotenv documents are
+flat: a dot in `SERVICE.TOKEN` is part of that single key, not a nesting
+separator. Cipherleaf rejects paths reserved for SOPS metadata before an edit
+can reach the save step.
 
 Cipherleaf shows the nearest `.sops.yaml` when one exists, but saving does not
 require it. Existing SOPS metadata remains authoritative, and Cipherleaf

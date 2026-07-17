@@ -30,9 +30,8 @@ final class SOPSIntegrationTests: XCTestCase {
     )
 
     _ = try await fixture.client.save(
-      saveRequest(
+      fixture.saveRequest(
         manifestURL: manifestURL,
-        identityURL: fixture.identityURL,
         opened: opened,
         root: updatedRoot
       )
@@ -69,9 +68,8 @@ final class SOPSIntegrationTests: XCTestCase {
 
     do {
       _ = try await fixture.client.save(
-        saveRequest(
+        fixture.saveRequest(
           manifestURL: manifestURL,
-          identityURL: fixture.identityURL,
           opened: opened,
           root: updatedRoot
         )
@@ -104,9 +102,8 @@ final class SOPSIntegrationTests: XCTestCase {
       .string("updated-synthetic"),
       at: tokenPath
     )
-    let request = saveRequest(
+    let request = fixture.saveRequest(
       manifestURL: manifestURL,
-      identityURL: fixture.identityURL,
       opened: opened,
       root: updatedRoot
     )
@@ -178,9 +175,8 @@ final class SOPSIntegrationTests: XCTestCase {
       .removing(at: obsoletePath)
 
     _ = try await fixture.client.save(
-      saveRequest(
+      fixture.saveRequest(
         manifestURL: manifestURL,
-        identityURL: fixture.identityURL,
         opened: opened,
         root: updatedRoot
       )
@@ -231,9 +227,8 @@ final class SOPSIntegrationTests: XCTestCase {
     )
 
     let saved = try await fixture.client.save(
-      saveRequest(
+      fixture.saveRequest(
         manifestURL: manifestURL,
-        identityURL: fixture.identityURL,
         opened: opened,
         root: updatedRoot
       )
@@ -286,29 +281,6 @@ final class SOPSIntegrationTests: XCTestCase {
     XCTAssertTrue(opened.sourceContainsComments)
   }
 
-  private func saveRequest(
-    manifestURL: URL,
-    identityURL: URL,
-    opened: OpenedSOPSFile,
-    root: SecretValue
-  ) -> SaveSOPSFileRequest {
-    SaveSOPSFileRequest(
-      manifestURL: manifestURL,
-      identityURL: identityURL,
-      format: opened.format,
-      expectedRevision: opened.revision,
-      originalRecipients: opened.recipients,
-      candidate: SaveCandidate(
-        root: root,
-        patch: DocumentPatch.between(
-          baseline: opened.root,
-          candidate: root
-        ),
-        nextGeneration: nil
-      )
-    )
-  }
-
   private func assertRoundTrip(
     plaintext: Data,
     format: SOPSFileFormat,
@@ -329,9 +301,8 @@ final class SOPSIntegrationTests: XCTestCase {
     )
 
     _ = try await fixture.client.save(
-      saveRequest(
+      fixture.saveRequest(
         manifestURL: manifestURL,
-        identityURL: fixture.identityURL,
         opened: opened,
         root: updatedRoot
       )
