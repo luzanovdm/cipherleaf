@@ -15,7 +15,7 @@ concurrency:
 jobs:
   analyze:
     name: Analyze Swift
-    runs-on: macos-26
+    runs-on: macos-26-intel
     timeout-minutes: 30
     permissions:
       contents: read
@@ -40,13 +40,19 @@ jobs:
           build-mode: manual
 
       - name: Build for analysis
+        timeout-minutes: 15
+        # Keep Swift extraction to one architecture and one compiler pass.
         run: >-
           xcodebuild build
-          -quiet
           -project Cipherleaf.xcodeproj
           -scheme Cipherleaf
+          -configuration Debug
           -destination 'platform=macOS'
           -derivedDataPath .build/CodeQLDerivedData
+          ARCHS=x86_64
+          ONLY_ACTIVE_ARCH=YES
+          SWIFT_COMPILATION_MODE=wholemodule
+          COMPILER_INDEX_STORE_ENABLE=NO
           CODE_SIGNING_ALLOWED=NO
 
       - name: Analyze
