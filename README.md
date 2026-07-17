@@ -1,5 +1,8 @@
 # Cipherleaf
 
+[![CI](https://github.com/luzanovdm/cipherleaf/actions/workflows/ci.yml/badge.svg)](https://github.com/luzanovdm/cipherleaf/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/luzanovdm/cipherleaf/actions/workflows/codeql.yml/badge.svg)](https://github.com/luzanovdm/cipherleaf/actions/workflows/codeql.yml)
+
 Cipherleaf is a native macOS editor for existing
 [SOPS](https://github.com/getsops/sops) documents encrypted with native
 [age](https://github.com/FiloSottile/age) recipients.
@@ -58,9 +61,9 @@ brew install age sops
 ## Run from source
 
 ```sh
-brew install xcodegen
 git clone https://github.com/luzanovdm/cipherleaf.git
 cd cipherleaf
+brew bundle
 xcodegen generate
 open Cipherleaf.xcodeproj
 ```
@@ -92,11 +95,14 @@ application fits your threat model.
 ## Development
 
 ```sh
-brew install actionlint age ripgrep shellcheck sops xcodegen
+brew bundle
 Scripts/test.sh
 shellcheck Scripts/*.sh
 actionlint .github/workflows/*.yml
 ```
+
+The repository `Brewfile` is the source of truth for command-line development
+and CI dependencies. Run `brew bundle check` to verify an existing setup.
 
 `Scripts/test.sh` runs architecture and security guardrails, strict
 `swift-format` linting, unit tests, and synthetic SOPS/age integration tests.
