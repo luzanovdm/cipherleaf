@@ -40,8 +40,8 @@ The script:
 - archives a universal Release build with Hardened Runtime;
 - exports it with Developer ID automatic signing through Xcode;
 - uploads the archive to Apple's notary service and waits for completion;
-- exports the stapled app and verifies its signature, team, ticket, and
-  Gatekeeper assessment;
+- staples the accepted Apple ticket to the signed app and verifies its
+  signature, team, ticket, and Gatekeeper assessment;
 - creates the final ZIP and SHA-256 checksum.
 
 The output is:
