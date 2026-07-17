@@ -97,17 +97,22 @@ struct ToolLocator: Sendable {
     let attributes = try FileManager.default.attributesOfItem(
       atPath: resolvedURL.path
     )
-    let permissions =
-      (attributes[.posixPermissions] as? NSNumber)?.intValue ?? 0
+    guard attributes[.type] as? FileAttributeType == .typeRegular else {
+      throw ToolLocatorError.notRegularFile(tool, resolvedURL)
+    }
+    guard
+      let permissions = (attributes[.posixPermissions] as? NSNumber)?.intValue,
+      let owner = (attributes[.ownerAccountID] as? NSNumber)?.uint32Value
+    else {
+      throw ToolLocatorError.cannotVerifyTrust(tool, resolvedURL)
+    }
     guard permissions & 0o022 == 0 else {
       throw ToolLocatorError.insecurePermissions(tool, resolvedURL)
     }
 
-    if let owner = (attributes[.ownerAccountID] as? NSNumber)?.uint32Value {
-      let currentUser = Darwin.getuid()
-      guard owner == 0 || owner == currentUser else {
-        throw ToolLocatorError.untrustedOwner(tool, resolvedURL)
-      }
+    let currentUser = Darwin.getuid()
+    guard owner == 0 || owner == currentUser else {
+      throw ToolLocatorError.untrustedOwner(tool, resolvedURL)
     }
 
     return resolvedURL
@@ -115,19 +120,25 @@ struct ToolLocator: Sendable {
 }
 
 enum ToolLocatorError: LocalizedError {
+  case cannotVerifyTrust(ExternalTool, URL)
   case configuredPathIsNotExecutable(ExternalTool, URL)
   case insecurePermissions(ExternalTool, URL)
   case notFound(ExternalTool)
+  case notRegularFile(ExternalTool, URL)
   case untrustedOwner(ExternalTool, URL)
 
   var errorDescription: String? {
     switch self {
+    case .cannotVerifyTrust(let tool, let url):
+      "Could not verify the owner and permissions of \(tool.rawValue) at \(url.path)."
     case .configuredPathIsNotExecutable(let tool, let url):
       "\(tool.rawValue) is not executable at \(url.path)."
     case .insecurePermissions(let tool, let url):
       "\(tool.rawValue) is writable by a group or other users at \(url.path)."
     case .notFound(let tool):
       "Could not find \(tool.rawValue). Install it with Homebrew or set its path in Settings."
+    case .notRegularFile(let tool, let url):
+      "\(tool.rawValue) is not a regular file at \(url.path)."
     case .untrustedOwner(let tool, let url):
       "\(tool.rawValue) is not owned by the current user or root at \(url.path)."
     }

@@ -16,7 +16,7 @@ final class SOPSMetadataParserTests: XCTestCase {
       """.utf8
     )
 
-    let recipients = try SOPSMetadataParser().parse(data)
+    let recipients = try SOPSMetadataParser().parse(data, format: .yaml)
 
     XCTAssertEqual(
       recipients.map(\.value),
@@ -29,7 +29,10 @@ final class SOPSMetadataParserTests: XCTestCase {
 
   func testRejectsDocumentWithoutAgeRecipients() {
     XCTAssertThrowsError(
-      try SOPSMetadataParser().parse(Data("sops: {}".utf8))
+      try SOPSMetadataParser().parse(
+        Data("sops: {}".utf8),
+        format: .yaml
+      )
     )
   }
 
@@ -49,7 +52,7 @@ final class SOPSMetadataParserTests: XCTestCase {
     )
 
     XCTAssertEqual(
-      try SOPSMetadataParser().parse(data).map(\.value),
+      try SOPSMetadataParser().parse(data, format: .json).map(\.value),
       ["age1qqqqqqqqqqqqqqqqqqqqqqqqqqqq"]
     )
   }
@@ -62,8 +65,96 @@ final class SOPSMetadataParserTests: XCTestCase {
     )
 
     XCTAssertEqual(
-      try SOPSMetadataParser().parse(data).map(\.value),
+      try SOPSMetadataParser().parse(data, format: .dotenv).map(\.value),
       ["age1zzzzzzzzzzzzzzzzzzzzzzzzzzzz"]
     )
+  }
+
+  func testDoesNotTreatUserJSONRecipientKeyAsMetadata() {
+    let data = Data(
+      #"""
+      {"recipient":"age1qqqqqqqqqqqqqqqqqqqqqqqqqqqq","sops":{}}
+      """#.utf8
+    )
+
+    XCTAssertThrowsError(
+      try SOPSMetadataParser().parse(data, format: .json)
+    ) { error in
+      XCTAssertEqual(
+        error as? SOPSMetadataError,
+        .noAgeRecipients
+      )
+    }
+  }
+
+  func testRejectsMixedRecipientTypes() {
+    let data = Data(
+      """
+      sops:
+          age:
+              - recipient: age1aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                enc: synthetic
+          pgp:
+              - fp: 0000000000000000
+                enc: synthetic
+      """.utf8
+    )
+
+    XCTAssertThrowsError(
+      try SOPSMetadataParser().parse(data, format: .yaml)
+    ) { error in
+      XCTAssertEqual(
+        error as? SOPSMetadataError,
+        .unsupportedRecipientType
+      )
+    }
+  }
+
+  func testRejectsSSHRecipientInAgeMetadata() {
+    let data = Data(
+      #"""
+      {
+        "sops": {
+          "age": [
+            {
+              "recipient": "ssh-ed25519 synthetic"
+            }
+          ]
+        }
+      }
+      """#.utf8
+    )
+
+    XCTAssertThrowsError(
+      try SOPSMetadataParser().parse(data, format: .json)
+    ) { error in
+      XCTAssertEqual(
+        error as? SOPSMetadataError,
+        .unsupportedRecipientType
+      )
+    }
+  }
+
+  func testRejectsDuplicateYAMLMetadataSections() {
+    let data = Data(
+      """
+      sops:
+          age:
+              - recipient: age1aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                enc: synthetic
+          age:
+              - recipient: age1zzzzzzzzzzzzzzzzzzzzzzzzzzzz
+                enc: synthetic
+      """.utf8
+    )
+
+    XCTAssertThrowsError(
+      try SOPSMetadataParser().parse(data, format: .yaml)
+    ) { error in
+      XCTAssertEqual(
+        error as? SOPSMetadataError,
+        .malformedMetadata
+      )
+    }
   }
 }

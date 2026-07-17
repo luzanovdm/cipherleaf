@@ -39,15 +39,14 @@ struct MainWindow: View {
         statusMessage: notices.statusMessage
       )
     }
-    .sheet(isPresented: $secrets.isPresentingAddSecret) {
-      AddSecretSheet()
-    }
-    .sheet(item: $secrets.renamePath) { path in
-      RenameSecretSheet(path: path)
-    }
-    .sheet(isPresented: saveReviewBinding) {
-      if let candidate = secrets.saveCandidate {
-        SaveReviewSheet(candidate: candidate)
+    .sheet(item: $secrets.presentedSheet) { sheet in
+      switch sheet {
+      case .addSecret:
+        AddSecretSheet()
+      case .rename(let path):
+        RenameSecretSheet(path: path)
+      case .saveReview(let preparedSave):
+        SaveReviewSheet(preparedSave: preparedSave)
       }
     }
     .confirmationDialog(
@@ -92,16 +91,6 @@ struct MainWindow: View {
     )
   }
 
-  private var saveReviewBinding: Binding<Bool> {
-    Binding(
-      get: { secrets.saveCandidate != nil },
-      set: { isPresented in
-        if !isPresented {
-          secrets.saveCandidate = nil
-        }
-      }
-    )
-  }
 }
 
 private struct MainWindowToolbar: ToolbarContent {
@@ -131,7 +120,7 @@ private struct MainWindowToolbar: ToolbarContent {
       .help("Reload encrypted document from disk")
 
       Button("Add value", systemImage: "plus") {
-        secrets.isPresentingAddSecret = true
+        secrets.presentAddSecret()
       }
       .disabled(workspace.phase != .open)
 

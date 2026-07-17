@@ -71,4 +71,28 @@ final class ProcessExecutorTests: XCTestCase {
       )
     }
   }
+
+  func testTimeoutTerminatesDescendantsHoldingOutputPipe() async {
+    let startedAt = ContinuousClock.now
+
+    do {
+      _ = try await ProcessExecutor().run(
+        ProcessRequest(
+          executable: URL(fileURLWithPath: "/bin/sh"),
+          arguments: [
+            "-c",
+            "sleep 5 & exit 0",
+          ],
+          timeoutSeconds: 0.1
+        )
+      )
+      XCTFail("Expected the process group to time out.")
+    } catch {
+      XCTAssertTrue(error.localizedDescription.contains("did not finish"))
+      XCTAssertLessThan(
+        startedAt.duration(to: .now),
+        .seconds(2)
+      )
+    }
+  }
 }

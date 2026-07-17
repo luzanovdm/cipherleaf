@@ -22,6 +22,16 @@ values in JSON-compatible document trees: strings, numbers, Booleans, and
 nulls. It does not create identities, create a new encrypted document, rotate
 recipients, or replace SOPS policy management.
 
+## Workspace
+
+![Cipherleaf workspace with a synthetic SOPS document](docs/images/cipherleaf-workspace.png)
+
+The workspace keeps the encrypted document and selected identity on the left,
+scalar paths and change markers in the middle, and a concealed value editor
+beside the Security Inspector. The inspector confirms the public recipient
+match without displaying identity contents or secret values. The screenshot
+uses synthetic names and values only.
+
 ## Requirements
 
 - macOS 15 or newer
@@ -70,14 +80,16 @@ application fits your threat model.
 ## Development
 
 ```sh
-brew install age ripgrep shellcheck sops xcodegen
+brew install actionlint age ripgrep shellcheck sops xcodegen
 Scripts/test.sh
+shellcheck Scripts/*.sh
+actionlint .github/workflows/*.yml
 ```
 
 `Scripts/test.sh` runs architecture and security guardrails, strict
 `swift-format` linting, unit tests, and synthetic SOPS/age integration tests.
-CI also builds an unsigned review package and verifies the Icon Composer
-resources in the app bundle.
+CI also lints shell scripts and workflows, builds an unsigned review package,
+and verifies the Icon Composer resources in the app bundle.
 
 The generated `Cipherleaf.xcodeproj` is intentionally ignored. `project.yml`
 is the source of truth.

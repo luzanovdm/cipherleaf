@@ -39,6 +39,7 @@ public final class DocumentSession {
   private var cachedChangeKinds: [SecretPath: DocumentChangeKind] = [:]
   private var cachedPatch = DocumentPatch(operations: [], changes: [])
   private let client: EncryptedFileClient
+  private var contentVersion = UUID()
   private let historyLimit: Int
   private var lastCoalescingKey: String?
   private var redoStack: [HistoryEntry] = []
@@ -118,6 +119,7 @@ public final class DocumentSession {
     undoStack.removeAll(keepingCapacity: true)
     redoStack.removeAll(keepingCapacity: true)
     lastCoalescingKey = nil
+    invalidatePreparedSaves()
     phase = .open
   }
 
@@ -147,6 +149,7 @@ public final class DocumentSession {
     undoStack.removeAll(keepingCapacity: false)
     redoStack.removeAll(keepingCapacity: false)
     lastCoalescingKey = nil
+    invalidatePreparedSaves()
     phase = .closed
   }
 
@@ -201,6 +204,7 @@ public final class DocumentSession {
     undoStack.removeAll(keepingCapacity: true)
     redoStack.removeAll(keepingCapacity: true)
     lastCoalescingKey = nil
+    invalidatePreparedSaves()
   }
 
   public func undo() {
@@ -218,6 +222,7 @@ public final class DocumentSession {
     self.document = document
     refreshDerivedState()
     lastCoalescingKey = nil
+    invalidatePreparedSaves()
   }
 
   public func redo() {
@@ -235,25 +240,51 @@ public final class DocumentSession {
     self.document = document
     refreshDerivedState()
     lastCoalescingKey = nil
+    invalidatePreparedSaves()
   }
 
   public func endHistoryCoalescing() {
     lastCoalescingKey = nil
   }
 
-  public func prepareSave(incrementingGeneration: Bool) -> SaveCandidate? {
-    guard phase == .open, let document else {
+  public func prepareSave(incrementingGeneration: Bool) -> PreparedSave? {
+    guard phase == .open, let document, let revision else {
       return nil
     }
     let candidate = document.candidate(
       incrementingGeneration: incrementingGeneration
     )
-    return candidate.patch.operations.isEmpty ? nil : candidate
+    guard !candidate.patch.operations.isEmpty else {
+      return nil
+    }
+    return PreparedSave(
+      candidate: candidate,
+      contentVersion: contentVersion,
+      incrementingGeneration: incrementingGeneration,
+      revisionDigest: revision.digest
+    )
   }
 
-  public func save(_ candidate: SaveCandidate) async throws {
+  public func isCurrent(_ preparedSave: PreparedSave) -> Bool {
+    guard phase == .open,
+      preparedSave.contentVersion == contentVersion,
+      preparedSave.revisionDigest == revision?.digest,
+      let document
+    else {
+      return false
+    }
+    return
+      document.candidate(
+        incrementingGeneration: preparedSave.incrementingGeneration
+      ) == preparedSave.candidate
+  }
+
+  public func save(_ preparedSave: PreparedSave) async throws {
     guard phase == .open else {
       throw DocumentSessionError.documentBusy
+    }
+    guard isCurrent(preparedSave) else {
+      throw DocumentSessionError.staleSaveReview
     }
     guard let manifestURL,
       let identityURL,
@@ -275,17 +306,18 @@ public final class DocumentSession {
         format: format,
         expectedRevision: revision,
         originalRecipients: recipients,
-        candidate: candidate
+        candidate: preparedSave.candidate
       )
     )
 
-    self.document = SecretsDocument(root: candidate.root)
+    self.document = SecretsDocument(root: preparedSave.candidate.root)
     self.revision = saved.revision
     sourceContainsComments = saved.sourceContainsComments
     refreshDerivedState()
     undoStack.removeAll(keepingCapacity: true)
     redoStack.removeAll(keepingCapacity: true)
     lastCoalescingKey = nil
+    invalidatePreparedSaves()
   }
 
   public func refreshToolDiagnostics() async {
@@ -320,6 +352,7 @@ public final class DocumentSession {
     redoStack.removeAll(keepingCapacity: true)
     self.document = document
     refreshDerivedState()
+    invalidatePreparedSaves()
   }
 
   private func refreshDerivedState() {
@@ -328,6 +361,10 @@ public final class DocumentSession {
     cachedChangeKinds = Dictionary(
       uniqueKeysWithValues: cachedPatch.changes.map { ($0.path, $0.kind) }
     )
+  }
+
+  private func invalidatePreparedSaves() {
+    contentVersion = UUID()
   }
 }
 
@@ -340,6 +377,7 @@ public enum DocumentSessionError: LocalizedError {
   case documentBusy
   case mutationDidNotProduceDestination
   case noOpenDocument
+  case staleSaveReview
 
   public var errorDescription: String? {
     switch self {
@@ -349,6 +387,8 @@ public enum DocumentSessionError: LocalizedError {
       "The rename operation did not produce a destination path."
     case .noOpenDocument:
       "No encrypted document is open."
+    case .staleSaveReview:
+      "The document changed after this save review was prepared. Review the current changes again before saving."
     }
   }
 }

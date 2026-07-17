@@ -36,6 +36,7 @@ private struct SecretEditor: View {
   let value: SecretValue
 
   @FocusState private var focusedField: FocusField?
+  @State private var concealmentActivityID = UUID()
   @State private var isConfirmingRemoval = false
   @State private var isRevealed = false
   @State private var textDraft: String
@@ -68,7 +69,7 @@ private struct SecretEditor: View {
       Section {
         HStack {
           Button("Rename key…") {
-            secrets.renamePath = path
+            secrets.presentRename(at: path)
           }
           .disabled(path.editablePath == nil)
 
@@ -95,7 +96,7 @@ private struct SecretEditor: View {
     } message: {
       Text("The encrypted file is not changed until you save.")
     }
-    .task(id: isRevealed) {
+    .task(id: concealmentTaskID) {
       guard isRevealed, preferences.autoConcealSeconds > 0 else {
         return
       }
@@ -147,6 +148,7 @@ private struct SecretEditor: View {
       }
       .onChange(of: textDraft) {
         secrets.set(.string(textDraft), at: path)
+        recordSecretActivity()
       }
 
     case .number:
@@ -178,6 +180,7 @@ private struct SecretEditor: View {
       }
       .onChange(of: textDraft) {
         validateNumberDraft()
+        recordSecretActivity()
       }
 
     case .boolean:
@@ -226,7 +229,10 @@ private struct SecretEditor: View {
         }
         return content
       },
-      set: { secrets.set(.boolean($0), at: path) }
+      set: { newValue in
+        secrets.set(.boolean(newValue), at: path)
+        recordSecretActivity()
+      }
     )
   }
 
@@ -236,6 +242,7 @@ private struct SecretEditor: View {
       systemImage: isRevealed ? "eye.slash" : "eye"
     ) {
       isRevealed.toggle()
+      recordSecretActivity()
     }
     .labelStyle(.iconOnly)
     .buttonStyle(.borderless)
@@ -248,6 +255,21 @@ private struct SecretEditor: View {
     } else {
       secrets.remove(at: path)
     }
+  }
+
+  private func recordSecretActivity() {
+    guard isRevealed else {
+      return
+    }
+    concealmentActivityID = UUID()
+  }
+
+  private var concealmentTaskID: SecretConcealmentTaskID {
+    SecretConcealmentTaskID(
+      activityID: concealmentActivityID,
+      delaySeconds: preferences.autoConcealSeconds,
+      isRevealed: isRevealed
+    )
   }
 
   private func validateNumberDraft() {

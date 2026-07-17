@@ -6,6 +6,7 @@ Describe the user-visible or security-relevant outcome.
 
 - [ ] `Scripts/test.sh`
 - [ ] `shellcheck Scripts/*.sh`
+- [ ] `actionlint .github/workflows/*.yml`
 - [ ] I used only synthetic fixtures and examples.
 - [ ] I did not add logging, clipboard access, or temporary plaintext files.
 - [ ] I reviewed subprocess, identity, and atomic-write behavior if this change touches them.

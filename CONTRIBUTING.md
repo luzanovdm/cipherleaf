@@ -8,8 +8,10 @@ artifact.
 Install Xcode 26 or newer, then:
 
 ```sh
-brew install age ripgrep shellcheck sops xcodegen
+brew install actionlint age ripgrep shellcheck sops xcodegen
 Scripts/test.sh
+shellcheck Scripts/*.sh
+actionlint .github/workflows/*.yml
 ```
 
 The generated Xcode project is not committed. Change `project.yml`, regenerate

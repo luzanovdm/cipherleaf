@@ -17,6 +17,8 @@ enum SecureEnvironment {
       }
     )
 
+    environment["SOPS_DISABLE_VERSION_CHECK"] = "1"
+
     if let identityURL {
       environment["SOPS_AGE_KEY_FILE"] = identityURL.path
       environment["SOPS_DECRYPTION_ORDER"] = "age"

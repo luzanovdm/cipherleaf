@@ -61,7 +61,7 @@ Select a path in the middle column. Values are concealed by default.
 - Use **Reveal** only while you need to inspect or edit a value.
 - Change the scalar type from the type picker when necessary.
 - Use **Add value** to add a scalar at a new path.
-- Use the row menu to rename or remove a value.
+- Use the editor actions below the value to rename or remove it.
 - Use standard **Undo** and **Redo** commands.
 
 Revealed values conceal themselves after the interval selected in Settings and

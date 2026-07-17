@@ -34,14 +34,17 @@ been exposed.
 ## Plaintext flow
 
 Opening a document runs SOPS with an explicit executable path and a restricted
-environment. SOPS writes JSON to a pipe. Cipherleaf decodes that stream into
-an in-memory document tree.
+environment. Cipherleaf reads a bounded, no-follow ciphertext snapshot and
+sends those exact bytes to SOPS through standard input. SOPS writes JSON to a
+pipe, and Cipherleaf decodes that stream into an in-memory document tree.
 
 During a save, each changed value is encoded in memory and sent to
 `sops set --value-stdin`. Removed paths use `sops unset`. A value is never
 placed in the argument vector. Command stdout and stderr are captured, bounded,
 and not logged. Expected diagnostic stderr is sanitized; secret-processing
-commands use redacted failures.
+commands use redacted failures. Each invocation runs in its own process group,
+so cancellation and timeout termination also cover descendants that retain a
+pipe. SOPS version checks are disabled to keep diagnostics local.
 
 SOPS may normalize YAML and dotenv while applying these operations, including
 removing comments. Cipherleaf conservatively detects comment markers and warns
@@ -94,7 +97,9 @@ source you trust.
 7. Parse the staging metadata and verify that the recipients are unchanged.
 8. Re-read the target and compare its SHA-256 revision again, narrowing the
    window for concurrent external edits during the SOPS operations.
-9. Rename the staging file over the target and `fsync` the directory.
+9. Re-open the staging file without following links, compare it with the
+   verified ciphertext, reassert mode `0600`, and `fsync` it.
+10. Rename the staging file over the target and `fsync` the directory.
 
 Before the rename, any failure leaves the original target in place. If the
 rename succeeds but directory synchronization fails, the new encrypted file
@@ -121,5 +126,6 @@ tools and opens user-selected files outside its container. Hardened Runtime is
 enabled for signed builds.
 
 Cipherleaf contains no network client. SOPS may support remote key services,
-but Cipherleaf restricts decryption order to native age and accepts only
-native age recipients.
+but Cipherleaf restricts decryption order to native age, accepts only
+documents whose metadata contains native age recipients exclusively, and
+disables SOPS version checks.

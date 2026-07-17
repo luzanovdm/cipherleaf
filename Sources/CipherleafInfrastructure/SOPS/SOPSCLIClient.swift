@@ -51,10 +51,12 @@ private struct SOPSCLIService: Sendable {
     manifestURL: URL,
     identityURL: URL
   ) async throws -> OpenedSOPSFile {
-    try fileSafety.validateManifest(manifestURL)
     let format = try SOPSFileFormat(url: manifestURL)
-    let encryptedData = try Data(contentsOf: manifestURL)
-    let recipients = try metadataParser.parse(encryptedData)
+    let encryptedSnapshot = try fileSafety.readManifest(manifestURL)
+    let recipients = try metadataParser.parse(
+      encryptedSnapshot.data,
+      format: format
+    )
     let identityRecipients = try await identityClient.inspect(identityURL)
 
     guard !Set(recipients).isDisjoint(with: identityRecipients) else {
@@ -62,7 +64,8 @@ private struct SOPSCLIService: Sendable {
     }
 
     let root = try await decrypt(
-      manifestURL: manifestURL,
+      encryptedData: encryptedSnapshot.data,
+      filenameURL: manifestURL,
       identityURL: identityURL,
       format: format
     )
@@ -73,12 +76,12 @@ private struct SOPSCLIService: Sendable {
       recipients: recipients,
       identityRecipients: identityRecipients,
       policyURL: nearestPolicy(to: manifestURL),
-      revision: try revisionCalculator.revision(
-        for: encryptedData,
-        at: manifestURL
+      revision: revisionCalculator.revision(
+        for: encryptedSnapshot.data,
+        modifiedAt: encryptedSnapshot.modifiedAt
       ),
       sourceContainsComments: containsComments(
-        in: encryptedData,
+        in: encryptedSnapshot.data,
         format: format
       )
     )
@@ -89,24 +92,26 @@ private struct SOPSCLIService: Sendable {
       throw SOPSCLIError.emptyPatch
     }
 
-    try fileSafety.validateManifest(request.manifestURL)
     try fileSafety.validateIdentity(request.identityURL)
-    let currentData = try Data(contentsOf: request.manifestURL)
-    let currentRevision = try revisionCalculator.revision(
-      for: currentData,
-      at: request.manifestURL
+    let currentSnapshot = try fileSafety.readManifest(request.manifestURL)
+    let currentRevision = revisionCalculator.revision(
+      for: currentSnapshot.data,
+      modifiedAt: currentSnapshot.modifiedAt
     )
     guard currentRevision.digest == request.expectedRevision.digest else {
       throw SOPSCLIError.externalModification
     }
 
-    let currentRecipients = try metadataParser.parse(currentData)
+    let currentRecipients = try metadataParser.parse(
+      currentSnapshot.data,
+      format: request.format
+    )
     guard currentRecipients == request.originalRecipients else {
       throw SOPSCLIError.recipientsChanged
     }
 
     let transaction = try AtomicFileTransaction.stage(
-      currentData,
+      currentSnapshot.data,
       for: request.manifestURL
     )
 
@@ -119,8 +124,18 @@ private struct SOPSCLIService: Sendable {
       )
     }
 
+    let stagedSnapshot = try fileSafety.readManifest(transaction.stagedURL)
+    let stagedRecipients = try metadataParser.parse(
+      stagedSnapshot.data,
+      format: request.format
+    )
+    guard stagedRecipients == request.originalRecipients else {
+      throw SOPSCLIError.recipientsChanged
+    }
+
     let verifiedRoot = try await decrypt(
-      manifestURL: transaction.stagedURL,
+      encryptedData: stagedSnapshot.data,
+      filenameURL: transaction.stagedURL,
       identityURL: request.identityURL,
       format: request.format
     )
@@ -128,30 +143,25 @@ private struct SOPSCLIService: Sendable {
       throw SOPSCLIError.verificationMismatch
     }
 
-    let stagedData = try Data(contentsOf: transaction.stagedURL)
-    let stagedRecipients = try metadataParser.parse(stagedData)
-    guard stagedRecipients == request.originalRecipients else {
-      throw SOPSCLIError.recipientsChanged
-    }
-
-    let latestData = try Data(contentsOf: request.manifestURL)
-    let latestRevision = try revisionCalculator.revision(
-      for: latestData,
-      at: request.manifestURL
+    let latestSnapshot = try fileSafety.readManifest(request.manifestURL)
+    let latestRevision = revisionCalculator.revision(
+      for: latestSnapshot.data,
+      modifiedAt: latestSnapshot.modifiedAt
     )
     guard latestRevision.digest == request.expectedRevision.digest else {
       throw SOPSCLIError.externalModification
     }
 
-    try transaction.commit()
-    let installedData = try Data(contentsOf: request.manifestURL)
+    let installedModificationDate = try transaction.commit(
+      expectedData: stagedSnapshot.data
+    )
     return SavedSOPSFile(
-      revision: try revisionCalculator.revision(
-        for: installedData,
-        at: request.manifestURL
+      revision: revisionCalculator.revision(
+        for: stagedSnapshot.data,
+        modifiedAt: installedModificationDate
       ),
       sourceContainsComments: containsComments(
-        in: installedData,
+        in: stagedSnapshot.data,
         format: request.format
       )
     )
@@ -167,21 +177,23 @@ private struct SOPSCLIService: Sendable {
   private func diagnose(_ tool: ExternalTool) async -> ToolDiagnostic {
     do {
       let url = try locator.resolve(tool)
-      let output = try? await executor.run(
+      let arguments =
+        tool == .sops
+        ? ["--disable-version-check", "--version"]
+        : ["--version"]
+      let output = try await executor.run(
         ProcessRequest(
           executable: url,
-          arguments: ["--version"],
+          arguments: arguments,
           environment: SecureEnvironment.sops(),
           failureOutputPolicy: .diagnostic,
           outputLimit: 64 * 1_024
         )
       )
-      let version = output.flatMap {
-        let value =
-          String(decoding: $0.standardOutput, as: UTF8.self)
-          .trimmingCharacters(in: .whitespacesAndNewlines)
-        return value.isEmpty ? nil : value
-      }
+      let value =
+        String(decoding: output.standardOutput, as: UTF8.self)
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+      let version = value.isEmpty ? nil : value
       return ToolDiagnostic(
         name: tool.rawValue,
         state: .available(path: url.path, version: version)
@@ -195,7 +207,8 @@ private struct SOPSCLIService: Sendable {
   }
 
   private func decrypt(
-    manifestURL: URL,
+    encryptedData: Data,
+    filenameURL: URL,
     identityURL: URL,
     format: SOPSFileFormat
   ) async throws -> SecretValue {
@@ -207,9 +220,10 @@ private struct SOPSCLIService: Sendable {
           "decrypt",
           "--input-type", format.rawValue,
           "--output-type", "json",
-          manifestURL.path,
+          "--filename-override", filenameURL.path,
         ],
-        currentDirectory: manifestURL.deletingLastPathComponent(),
+        input: encryptedData,
+        currentDirectory: filenameURL.deletingLastPathComponent(),
         environment: SecureEnvironment.sops(identityURL: identityURL)
       )
     )

@@ -55,4 +55,36 @@ final class FileSafetyValidatorTests: XCTestCase {
       try FileSafetyValidator().validateIdentity(identityURL)
     )
   }
+
+  func testReadManifestReturnsExactSnapshot() throws {
+    let fixture = try TemporaryDirectory()
+    let manifestURL = fixture.url.appendingPathComponent(
+      "synthetic.sops.yaml"
+    )
+    let expected = Data("synthetic-ciphertext".utf8)
+    try expected.write(to: manifestURL)
+
+    let snapshot = try FileSafetyValidator().readManifest(manifestURL)
+
+    XCTAssertEqual(snapshot.data, expected)
+    XCTAssertLessThanOrEqual(
+      abs(snapshot.modifiedAt.timeIntervalSinceNow),
+      5
+    )
+  }
+
+  func testReadManifestRejectsSymbolicLink() throws {
+    let fixture = try TemporaryDirectory()
+    let targetURL = fixture.url.appendingPathComponent("target.sops.yaml")
+    let linkURL = fixture.url.appendingPathComponent("link.sops.yaml")
+    try Data("synthetic-ciphertext".utf8).write(to: targetURL)
+    try FileManager.default.createSymbolicLink(
+      at: linkURL,
+      withDestinationURL: targetURL
+    )
+
+    XCTAssertThrowsError(
+      try FileSafetyValidator().readManifest(linkURL)
+    )
+  }
 }

@@ -10,8 +10,12 @@ fail() {
   exit 1
 }
 
-if find Sources -type d -name Views -print -quit | grep -q .; then
-  fail "generic Views directories are forbidden; place UI in its owning domain or page"
+if find Sources -type d \
+  \( -name Views -o -name Helpers -o -name Utils -o -name Managers \) \
+  -print -quit |
+  grep -q .
+then
+  fail "generic Views, Helpers, Utils, and Managers directories are forbidden"
 fi
 
 for directory in Sources/Cipherleaf/*/; do
@@ -41,7 +45,7 @@ if rg -n '^import (AppKit|SwiftUI)$' Sources/CipherleafInfrastructure; then
 fi
 
 if rg -n \
-  'Process\(' \
+  '\b(Process|posix_spawn|fork|exec[lv][a-z]*|system|popen)\s*\(' \
   Sources \
   --glob '*.swift' \
   --glob '!Sources/CipherleafInfrastructure/Process/**'
@@ -62,11 +66,19 @@ if rg -n '\b(ObservableObject|@Published)\b' Sources --glob '*.swift'; then
 fi
 
 if rg -n \
-  '\b(NSPasteboard|URLSession|NWConnection|Logger|OSLog|os_log)\b' \
+  '\b(NSPasteboard|URLSession|NSURLConnection|NWConnection|NWListener|Logger|OSLog|os_log)\b' \
   Sources \
   --glob '*.swift'
 then
   fail "clipboard writes, network clients, and application logging are forbidden"
+fi
+
+if rg -n \
+  '\b(NSTemporaryDirectory|mkstemp|mkdtemp|tmpfile)\b|\.temporaryDirectory\b' \
+  Sources \
+  --glob '*.swift'
+then
+  fail "temporary-file APIs are forbidden in product code"
 fi
 
 session_leaks="$(
