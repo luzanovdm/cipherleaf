@@ -7,9 +7,24 @@ import Observation
 @MainActor
 @Observable
 final class SecretsFacade {
-  var isPresentingAddSecret = false
-  var renamePath: SecretPath?
-  var saveCandidate: SaveCandidate?
+  enum Sheet: Identifiable {
+    case addSecret
+    case rename(SecretPath)
+    case saveReview(PreparedSave)
+
+    var id: String {
+      switch self {
+      case .addSecret:
+        "add-secret"
+      case .rename(let path):
+        "rename:\(path.id)"
+      case .saveReview(let preparedSave):
+        "save:\(preparedSave.id.uuidString)"
+      }
+    }
+  }
+
+  var presentedSheet: Sheet?
   var selectedPath: SecretPath?
 
   private(set) var validationIssues: [SecretPath: String] = [:]
@@ -70,7 +85,22 @@ final class SecretsFacade {
 
   func synchronizeSelection() {
     validationIssues.removeAll(keepingCapacity: true)
+    repairPresentedSheet()
     repairSelection()
+  }
+
+  func presentAddSecret() {
+    guard isOpen else {
+      return
+    }
+    presentedSheet = .addSecret
+  }
+
+  func presentRename(at path: SecretPath) {
+    guard isOpen, session.value(at: path) != nil else {
+      return
+    }
+    presentedSheet = .rename(path)
   }
 
   func value(at path: SecretPath) -> SecretValue? {
@@ -128,7 +158,7 @@ final class SecretsFacade {
     do {
       selectedPath = try session.rename(at: path, to: newKey)
       validationIssues.removeValue(forKey: path)
-      renamePath = nil
+      presentedSheet = nil
       notices.statusMessage = nil
       return true
     } catch {
@@ -182,10 +212,10 @@ final class SecretsFacade {
       notices.statusMessage = "No changes to save."
       return
     }
-    saveCandidate = candidate
+    presentedSheet = .saveReview(candidate)
   }
 
-  func save(_ candidate: SaveCandidate) async {
+  func save(_ preparedSave: PreparedSave) async {
     let manifestAccess = session.manifestURL.map(SecurityScopedAccess.init)
     let identityAccess = session.identityURL.map(SecurityScopedAccess.init)
     defer {
@@ -194,12 +224,32 @@ final class SecretsFacade {
     }
 
     do {
-      try await session.save(candidate)
-      saveCandidate = nil
+      try await session.save(preparedSave)
+      presentedSheet = nil
       validationIssues.removeAll(keepingCapacity: true)
       notices.statusMessage = "Encrypted patch verified and installed atomically."
     } catch {
+      repairPresentedSheet()
       notices.present(error)
+    }
+  }
+
+  private func repairPresentedSheet() {
+    switch presentedSheet {
+    case .addSecret:
+      if !isOpen {
+        presentedSheet = nil
+      }
+    case .rename(let path):
+      if !isOpen || session.value(at: path) == nil {
+        presentedSheet = nil
+      }
+    case .saveReview(let preparedSave):
+      if !session.isCurrent(preparedSave) {
+        presentedSheet = nil
+      }
+    case nil:
+      break
     }
   }
 

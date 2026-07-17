@@ -14,6 +14,7 @@ struct AddSecretSheet: View {
 
   @FocusState private var focusedField: FocusField?
   @State private var booleanValue = false
+  @State private var concealmentActivityID = UUID()
   @State private var isRevealed = false
   @State private var kind = SecretScalarKind.string
   @State private var path = ""
@@ -65,7 +66,7 @@ struct AddSecretSheet: View {
     .onAppear {
       focusedField = .path
     }
-    .task(id: isRevealed) {
+    .task(id: concealmentTaskID) {
       guard isRevealed, preferences.autoConcealSeconds > 0 else {
         return
       }
@@ -79,6 +80,9 @@ struct AddSecretSheet: View {
     }
     .onChange(of: kind) {
       isRevealed = false
+    }
+    .onChange(of: textValue) {
+      recordSecretActivity()
     }
     .onChange(of: scenePhase) {
       if scenePhase != .active {
@@ -105,7 +109,7 @@ struct AddSecretSheet: View {
     case .boolean:
       HStack {
         if isRevealed {
-          Toggle("Enabled", isOn: $booleanValue)
+          Toggle("Enabled", isOn: booleanBinding)
         } else {
           Text("••••••••")
             .font(.body.monospaced())
@@ -145,6 +149,7 @@ struct AddSecretSheet: View {
       systemImage: isRevealed ? "eye.slash" : "eye"
     ) {
       isRevealed.toggle()
+      recordSecretActivity()
     }
     .labelStyle(.iconOnly)
     .buttonStyle(.borderless)
@@ -164,6 +169,24 @@ struct AddSecretSheet: View {
     }
   }
 
+  private var booleanBinding: Binding<Bool> {
+    Binding(
+      get: { booleanValue },
+      set: { newValue in
+        booleanValue = newValue
+        recordSecretActivity()
+      }
+    )
+  }
+
+  private var concealmentTaskID: SecretConcealmentTaskID {
+    SecretConcealmentTaskID(
+      activityID: concealmentActivityID,
+      delaySeconds: preferences.autoConcealSeconds,
+      isRevealed: isRevealed
+    )
+  }
+
   private var isValid: Bool {
     guard (try? SecretPath.parseEditablePath(path)) != nil else {
       return false
@@ -175,5 +198,12 @@ struct AddSecretSheet: View {
     if secrets.add(path: path, value: value) {
       dismiss()
     }
+  }
+
+  private func recordSecretActivity() {
+    guard isRevealed else {
+      return
+    }
+    concealmentActivityID = UUID()
   }
 }

@@ -233,6 +233,67 @@ final class DocumentSessionTests: XCTestCase {
     XCTAssertEqual(session.value(at: tokenPath), .string("candidate"))
     XCTAssertEqual(session.phase, .open)
   }
+
+  func testSaveRejectsReviewPreparedBeforeLaterEdit() async throws {
+    let recipient = try AgeRecipient(
+      "age1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
+    )
+    let tokenPath = SecretPath(components: [.key("token")])
+    let client = EncryptedFileClient(
+      open: { _, _ in
+        OpenedSOPSFile(
+          root: .object(["token": .string("synthetic")]),
+          format: .yaml,
+          recipients: [recipient],
+          identityRecipients: [recipient],
+          policyURL: nil,
+          revision: FileRevision(
+            digest: "initial",
+            byteCount: 1,
+            modifiedAt: nil
+          )
+        )
+      },
+      save: { _ in
+        XCTFail("A stale save review must not reach the file client.")
+        return SavedSOPSFile(
+          revision: FileRevision(
+            digest: "unexpected",
+            byteCount: 1,
+            modifiedAt: nil
+          ),
+          sourceContainsComments: false
+        )
+      },
+      diagnoseTools: { [] }
+    )
+    let session = DocumentSession(client: client)
+    try await session.open(
+      manifestURL: URL(fileURLWithPath: "/tmp/synthetic.sops.yaml"),
+      identityURL: URL(fileURLWithPath: "/tmp/synthetic-identity.txt")
+    )
+    try session.set(.string("reviewed"), at: tokenPath)
+    let preparedSave = try XCTUnwrap(
+      session.prepareSave(incrementingGeneration: false)
+    )
+
+    try session.set(.string("edited-after-review"), at: tokenPath)
+
+    XCTAssertFalse(session.isCurrent(preparedSave))
+    do {
+      try await session.save(preparedSave)
+      XCTFail("Expected the stale save review to be rejected.")
+    } catch {
+      XCTAssertTrue(
+        error.localizedDescription.contains("Review the current changes again")
+      )
+    }
+    XCTAssertEqual(
+      session.value(at: tokenPath),
+      .string("edited-after-review")
+    )
+    XCTAssertTrue(session.isDirty)
+  }
 }
 
 private actor SaveGate {

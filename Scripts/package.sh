@@ -9,6 +9,11 @@ VERSION="${VERSION:-$(git describe --tags --always --dirty 2>/dev/null || echo l
 
 cd "$ROOT"
 
+if [[ ! "$VERSION" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$ ]]; then
+  echo "VERSION contains unsafe archive-name characters: $VERSION" >&2
+  exit 1
+fi
+
 "$ROOT/Scripts/check-architecture.sh"
 xcodegen generate
 rm -rf "$DERIVED_DATA"

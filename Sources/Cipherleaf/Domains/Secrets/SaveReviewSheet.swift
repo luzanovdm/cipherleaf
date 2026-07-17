@@ -1,3 +1,4 @@
+import CipherleafApplication
 import CipherleafDomain
 import SwiftUI
 
@@ -5,16 +6,16 @@ struct SaveReviewSheet: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(SecretsFacade.self) private var secrets
 
-  let candidate: SaveCandidate
+  let preparedSave: PreparedSave
 
   var body: some View {
     VStack(spacing: 0) {
       SaveReviewHeader(
-        nextGeneration: candidate.nextGeneration,
+        nextGeneration: preparedSave.candidate.nextGeneration,
         sourceContainsComments: secrets.sourceContainsComments
       )
 
-      List(candidate.patch.changes) { change in
+      List(preparedSave.candidate.patch.changes) { change in
         HStack {
           Image(systemName: change.systemImage)
             .accessibilityHidden(true)
@@ -53,8 +54,8 @@ struct SaveReviewSheet: View {
 
   private func save() {
     Task {
-      await secrets.save(candidate)
-      if secrets.saveCandidate == nil {
+      await secrets.save(preparedSave)
+      if secrets.presentedSheet == nil {
         dismiss()
       }
     }
