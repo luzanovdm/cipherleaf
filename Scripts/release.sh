@@ -11,7 +11,6 @@ NOTARY_POLL_SECONDS="${NOTARY_POLL_SECONDS:-15}"
 WORK_DIRECTORY="$ROOT/.build/public-release-$VERSION"
 ARCHIVE="$WORK_DIRECTORY/Cipherleaf.xcarchive"
 SIGNED_EXPORT="$WORK_DIRECTORY/signed"
-NOTARIZED_EXPORT="$WORK_DIRECTORY/notarized"
 OUTPUT_DIRECTORY="$ROOT/.build/release"
 FINAL_ARCHIVE="$OUTPUT_DIRECTORY/Cipherleaf-$VERSION-macos.zip"
 CHECKSUM="$FINAL_ARCHIVE.sha256"
@@ -120,36 +119,26 @@ xcodebuild -exportArchive \
   -exportOptionsPlist "$UPLOAD_OPTIONS" \
   -allowProvisioningUpdates
 
-NOTARY_LOG="$WORK_DIRECTORY/notary-export.log"
+STAPLER_LOG="$WORK_DIRECTORY/stapler.log"
 NOTARY_DEADLINE=$((SECONDS + NOTARY_TIMEOUT_SECONDS))
-NOTARY_READY=0
+TICKET_READY=0
 
 while ((SECONDS < NOTARY_DEADLINE)); do
-  rm -rf "$NOTARIZED_EXPORT"
-
-  if xcodebuild \
-    -exportNotarizedApp \
-    -archivePath "$ARCHIVE" \
-    -exportPath "$NOTARIZED_EXPORT" \
-    >"$NOTARY_LOG" 2>&1; then
-    NOTARY_READY=1
+  if xcrun stapler staple "$SIGNED_APP" >"$STAPLER_LOG" 2>&1; then
+    TICKET_READY=1
     break
-  fi
-
-  if ! grep -q "processing and not ready for distribution" "$NOTARY_LOG"; then
-    cat "$NOTARY_LOG" >&2
-    exit 1
   fi
 
   sleep "$NOTARY_POLL_SECONDS"
 done
 
-if [[ "$NOTARY_READY" != "1" ]]; then
+if [[ "$TICKET_READY" != "1" ]]; then
+  cat "$STAPLER_LOG" >&2
   echo "Notarization did not finish within $NOTARY_TIMEOUT_SECONDS seconds" >&2
   exit 1
 fi
 
-APP="$NOTARIZED_EXPORT/Cipherleaf.app"
+APP="$SIGNED_APP"
 SIGNATURE="$(codesign -dv --verbose=4 "$APP" 2>&1)"
 
 if [[ "$SIGNATURE" != *"Authority=Developer ID Application:"* ]]; then
