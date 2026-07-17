@@ -1,0 +1,6 @@
+brew "actionlint"
+brew "age"
+brew "ripgrep"
+brew "shellcheck"
+brew "sops"
+brew "xcodegen"
